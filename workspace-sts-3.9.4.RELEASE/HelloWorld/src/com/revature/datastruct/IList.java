@@ -33,19 +33,19 @@ public class IList<T> {
 		if (this.length() == 0) {
 			throw new ListOutOfBoundsException();
 		}
-		
-		//a head exists
+
+		// a head exists
 		if (ind == 0) {
 			cur = head;
 			head = head.getNext();
 			return cur.getValue();
 		}
-		
+
 		prev = head;
 		cur = head.getNext();
 
 		for (int i = 1; i < ind; i++) {
-			if(cur.getNext() == null)
+			if (cur.getNext() == null)
 				throw new ListOutOfBoundsException();
 			prev = cur;
 			cur = cur.getNext();
@@ -55,14 +55,49 @@ public class IList<T> {
 		return cur.getValue();
 	}
 
-	public T indexOf(int ind) {
+	public T get(int ind) {
 		INode<T> cur = head;
+		if (head == null) {
+			throw new ListOutOfBoundsException();
+		}
+		
 		for (int i = 0; i < ind; i++) {
-			if(cur.getNext() == null)
+			if (cur.getNext() == null)
 				throw new ListOutOfBoundsException();
 			cur = cur.getNext();
 		}
 		return cur.getValue();
+	}
+
+	public void insert(T t, int ind) {
+
+		INode<T> newNode = new INode<T>(t, null);
+
+		INode<T> prev;
+		INode<T> cur;
+		
+		if (ind > this.length()) {
+			throw new ListOutOfBoundsException();
+		}
+
+		if (ind == 0) {
+			newNode.setNext(head);
+			head = newNode;
+		} else if (this.length() == 1) {
+			head.setNext(newNode);
+		} else {
+			prev = head;
+			cur = head.getNext();
+
+			for (int i = 1; i < ind; i++) {
+				prev = cur;
+				cur = cur.getNext();
+			}
+			
+			prev.setNext(newNode);
+			newNode.setNext(cur);
+		}
+
 	}
 
 	public int length() {
