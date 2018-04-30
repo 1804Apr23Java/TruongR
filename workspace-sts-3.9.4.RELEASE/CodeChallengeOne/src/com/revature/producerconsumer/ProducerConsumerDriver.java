@@ -13,8 +13,8 @@ public class ProducerConsumerDriver {
 
 		final long startTime = System.nanoTime();
 
-		Consumer cons = new Consumer(10, startTime, 5000000);
-		Producer prod = new Producer(10, startTime, 5000000);
+		Consumer cons = new Consumer(10, startTime, 50000000);
+		Producer prod = new Producer(10, startTime, 50000000);
 
 		cons.start();
 		prod.start();
@@ -46,19 +46,20 @@ class Consumer extends Thread {
 		while (true) {
 			try {
 				consumed = new ArrayList<String>();
+				if (ProducerConsumerDriver.basket.size() == 0)
+					Thread.sleep(500);
 				for (int i = 0; i < amount; i++) {
 					if (ProducerConsumerDriver.basket.size() != 0)
 						consumed.add(ProducerConsumerDriver.basket.remove(0));
-				}
-				if (ProducerConsumerDriver.basket.size() == 0) {
-					this.sleep(50000);
 				}
 				System.out.println("Consumer has eaten: " + consumed);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			if (System.nanoTime() - startTime > runTime)
+			if ((System.nanoTime() - startTime) > runTime) {
+				System.out.println("Consumer finished.");
 				break;
+			}
 		}
 
 	}
@@ -85,15 +86,17 @@ class Producer extends Thread {
 					if (ProducerConsumerDriver.basket.size() < ProducerConsumerDriver.basketSize)
 						ProducerConsumerDriver.basket.add(produce.remove(0));
 					else {
-						this.sleep(50000);
+						Thread.sleep(500);
 					}
 				System.out.println("Producer has produced " + num + " objects.");
 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			if (System.nanoTime() - startTime > runTime)
+			if ((System.nanoTime() - startTime) > runTime) {
+				System.out.println("Producer finished.");
 				break;
+			}
 		}
 
 	}
