@@ -13,7 +13,7 @@ public class ProducerConsumerDriver {
 
 		final long startTime = System.nanoTime();
 
-		System.out.println("Starting at " + startTime);
+		//System.out.println("Starting at " + startTime);
 		
 		Consumer cons = new Consumer(10, startTime, 5000000000L);
 		Producer prod = new Producer(10, startTime, 5000000000L);
@@ -58,7 +58,7 @@ class Consumer extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Consumer at time " + System.nanoTime());
+			//System.out.println("Consumer at time " + System.nanoTime());
 			if ((System.nanoTime() - startTime) > runTime) {
 				System.out.println("Consumer finished.");
 				break;
@@ -96,7 +96,7 @@ class Producer extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Producer at time " + System.nanoTime());
+			//System.out.println("Producer at time " + System.nanoTime());
 			if ((System.nanoTime() - startTime) > runTime) {
 				System.out.println("Producer finished.");
 				break;
