@@ -6,15 +6,17 @@ import java.util.ArrayList;
 
 public class ProducerConsumerDriver {
 
-	public static final int basketSize = 50;
+	public static final int basketSize = 10;
 	public static List<String> basket = new Vector<String>(basketSize);
 
 	public static void main(String[] args) {
 
 		final long startTime = System.nanoTime();
 
-		Consumer cons = new Consumer(10, startTime, 50000000);
-		Producer prod = new Producer(10, startTime, 50000000);
+		System.out.println("Starting at " + startTime);
+		
+		Consumer cons = new Consumer(10, startTime, 5000000000L);
+		Producer prod = new Producer(10, startTime, 5000000000L);
 
 		cons.start();
 		prod.start();
@@ -33,9 +35,9 @@ class Consumer extends Thread {
 	private int amount;
 	private List<String> consumed;
 	private long startTime;
-	private int runTime;
+	private long runTime;
 
-	Consumer(int amount, long startTime, int runTime) {
+	Consumer(int amount, long startTime, long runTime) {
 		this.amount = amount;
 		this.startTime = startTime;
 		this.runTime = runTime;
@@ -56,6 +58,7 @@ class Consumer extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			System.out.println("Consumer at time " + System.nanoTime());
 			if ((System.nanoTime() - startTime) > runTime) {
 				System.out.println("Consumer finished.");
 				break;
@@ -69,9 +72,9 @@ class Producer extends Thread {
 	private int amount;
 	private List<String> produce;
 	private long startTime;
-	private int runTime;
+	private long runTime;
 
-	Producer(int amount, long startTime, int runTime) {
+	Producer(int amount, long startTime, long runTime) {
 		this.amount = amount;
 		this.startTime = startTime;
 		this.runTime = runTime;
@@ -93,6 +96,7 @@ class Producer extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			System.out.println("Producer at time " + System.nanoTime());
 			if ((System.nanoTime() - startTime) > runTime) {
 				System.out.println("Producer finished.");
 				break;
