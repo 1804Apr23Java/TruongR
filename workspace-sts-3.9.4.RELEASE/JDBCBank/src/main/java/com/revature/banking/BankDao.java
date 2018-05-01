@@ -1,6 +1,6 @@
 package com.revature.banking;
 
-public interface BankDAO {
+public interface BankDao {
 
 	void registerNewAccount() throws UsernameAlreadyUsedException;
 	void logIn() throws IncorrectUsernameException, IncorrectPasswordException;

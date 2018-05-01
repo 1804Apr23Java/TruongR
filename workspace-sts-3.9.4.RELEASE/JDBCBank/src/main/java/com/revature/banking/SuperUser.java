@@ -1,5 +1,5 @@
 package com.revature.banking;
 
-public class SuperUser {
-
+public class SuperUser extends User {
+	
 }
