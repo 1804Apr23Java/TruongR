@@ -3,15 +3,24 @@ package com.revature.banking;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User {
+public class BankClient implements InterfaceUser {
+	
+
+	
+	public void resetUsername() {
+		System.out.println("Please input new username");
+		
+	}
+	
 	protected List<Account> accountList;
 	
-	public User() {
+	public BankClient() {
 		this.accountList = new ArrayList<Account>();
 	}
 	
-	public User (int accountID, double balance) {
+	public BankClient (int accountID, double balance) {
 		this.accountList = new ArrayList<Account>();
 		this.accountList.add(new Account(accountID, balance));
 	}
+
 }

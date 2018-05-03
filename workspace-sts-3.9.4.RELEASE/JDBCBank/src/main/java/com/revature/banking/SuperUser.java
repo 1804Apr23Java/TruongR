@@ -1,5 +1,11 @@
 package com.revature.banking;
 
-public class SuperUser extends User {
+import java.util.List;
+
+public class SuperUser implements InterfaceUser {
 	
+	public void resetUsername() {
+
+	}
+
 }
