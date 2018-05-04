@@ -2,6 +2,11 @@ package com.revature.banking;
 
 import java.util.Scanner;
 
+import com.revature.dao.BankDao;
+import com.revature.domain.IncorrectPasswordException;
+import com.revature.domain.IncorrectUsernameException;
+import com.revature.domain.UsernameAlreadyUsedException;
+
 public class BankRunner {
 
 	public static final int MAX_TRIES = 5;

@@ -1,4 +1,4 @@
-package com.revature.banking;
+package com.revature.domain;
 
 public class IncorrectUsernameException extends Exception {
 

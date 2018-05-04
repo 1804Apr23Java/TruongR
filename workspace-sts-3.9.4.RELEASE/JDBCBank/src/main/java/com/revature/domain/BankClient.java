@@ -1,9 +1,9 @@
-package com.revature.banking;
+package com.revature.domain;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BankClient implements InterfaceUser {
+public class BankClient implements User {
 	
 
 	
