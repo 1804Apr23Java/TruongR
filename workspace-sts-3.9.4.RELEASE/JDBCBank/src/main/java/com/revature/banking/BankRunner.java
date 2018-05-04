@@ -6,10 +6,12 @@ public class BankRunner {
 
 	public static final int MAX_TRIES = 5;
 
+	
+	/*
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		BankDaoImpl dao = new BankDaoImpl();
+		BankDaoPLSQLImpl dao = new BankDaoPLSQLImpl();
 
 		try (Scanner s = new Scanner(System.in)) {
 
@@ -47,6 +49,8 @@ public class BankRunner {
 
 			} catch (NumberFormatException e) {
 				System.out.println("Error: input not an option.");
+				System.out.println("Goodbye.");
+				System.exit(0);
 			}
 
 			// check if username and password are valid
@@ -56,12 +60,14 @@ public class BankRunner {
 		}
 
 	}
+	
+	*/
 
 	private static void attemptLogIn(Scanner s, BankDao dao) {
 		String username, password;
 		System.out.print("Input username: ");
 		username = s.next();
-		System.out.println("Input password: ");
+		System.out.print("Input password: ");
 		password = s.next();
 		try {
 			dao.logIn(username, password);
@@ -76,7 +82,7 @@ public class BankRunner {
 		String username, password;
 		System.out.print("Input new username: ");
 		username = s.next();
-		System.out.println("Input password: ");
+		System.out.print("Input new password: ");
 		password = s.next();
 		try {
 			dao.registerNewUser(username, password);

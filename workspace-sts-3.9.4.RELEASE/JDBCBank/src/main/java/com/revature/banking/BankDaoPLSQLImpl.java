@@ -1,7 +1,13 @@
 package com.revature.banking;
 
-public class BankDaoImpl implements BankDao{
+import java.sql.*;
 
+public class BankDaoPLSQLImpl implements BankDao{
+
+	public BankDaoPLSQLImpl() {
+		
+	}
+	
 	@Override
 	public void registerNewUser(String username, String password) throws UsernameAlreadyUsedException {
 		// TODO Auto-generated method stub
