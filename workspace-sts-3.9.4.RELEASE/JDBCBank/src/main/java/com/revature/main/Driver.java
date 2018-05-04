@@ -1,25 +1,33 @@
 package com.revature.main;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.util.List;
 
-import com.revature.util.ConnectionUtil;
+import com.revature.dao.*;
+import com.revature.domain.Cave;
 
 public class Driver {
 	
 	public static void main(String[] args) {
-		try {
-			Connection c = ConnectionUtil.getConnectionFromFile("connection.properties");
-			System.out.println("success");
-		} catch (SQLException e) {
-			System.out.println("phail");
-			e.printStackTrace();
-		} catch (IOException e) {
-			System.out.println("phail");
-			e.printStackTrace();
+		CaveDao cd = new CaveDaoImpl();
 			
-		}
+		List<Cave> caves = cd.getCaves();
+
+		//caves.stream().forEach(System.out::println);
+		
+		//Cave c = cd.getCaveById(2);
+		//System.out.println(c);
+		
+		//cd.addCave("BadCaveNotAwesome", 68);
+
+		caves.stream().forEach(System.out::println);
+		
+		//cd.updateCaveCapacity(6, 43);
+		
+		//cd.updateCaveName(5, "slightlylessterriblecave");
+		
+		cd.deleteCave(7);
+		
+		
 	}
 	
 }
