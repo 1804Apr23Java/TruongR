@@ -6,28 +6,25 @@ import com.revature.dao.*;
 import com.revature.domain.Cave;
 
 public class Driver {
-	
+
 	public static void main(String[] args) {
 		CaveDao cd = new CaveDaoImpl();
-			
-		List<Cave> caves = cd.getCaves();
 
-		//caves.stream().forEach(System.out::println);
+		//SPACE TOURISMMMMMMMMMMMM
+		cd.addCave("TheMoon", 10000000);
 		
-		//Cave c = cd.getCaveById(2);
-		//System.out.println(c);
+		//cave in
+		cd.updateCaveCapacity(10, 19);
 		
-		//cd.addCave("BadCaveNotAwesome", 68);
+		//need to change this to avoid getting sued by d1sn3y
+		cd.updateCaveName(13, "Darsney Land");
+		
+		//homeowner's association made houseowner get rid of bears
+		cd.deleteCave(14);
 
-		caves.stream().forEach(System.out::println);
-		
-		//cd.updateCaveCapacity(6, 43);
-		
-		//cd.updateCaveName(5, "slightlylessterriblecave");
-		
-		cd.deleteCave(7);
-		
-		
-	}
 	
+		//caves.stream().forEach(System.out::println);
+
+	}
+
 }
