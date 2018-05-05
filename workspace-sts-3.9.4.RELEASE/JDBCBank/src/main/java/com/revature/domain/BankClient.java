@@ -18,7 +18,7 @@ public class BankClient implements User {
 		this.accountList = new ArrayList<Account>();
 	}
 	
-	public BankClient (int accountID, double balance) {
+	public void addAccount (int accountID, double balance) {
 		this.accountList = new ArrayList<Account>();
 		this.accountList.add(new Account(accountID, balance));
 	}

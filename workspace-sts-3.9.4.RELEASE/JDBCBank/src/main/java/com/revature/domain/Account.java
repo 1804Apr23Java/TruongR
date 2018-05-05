@@ -2,6 +2,11 @@ package com.revature.domain;
 
 public class Account {
 
+	@Override
+	public String toString() {
+		return "Account [accountID=" + accountID + ", balance=" + balance + "]";
+	}
+
 	private final int accountID;
 	private double balance;
 

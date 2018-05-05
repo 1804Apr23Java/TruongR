@@ -7,9 +7,9 @@ import com.revature.domain.IncorrectUsernameException;
 import com.revature.domain.OverdraftException;
 import com.revature.domain.UsernameAlreadyUsedException;
 
-public class BankDaoPLSQLImpl implements BankDao{
+public class BankDaoPLSQL implements BankDao{
 
-	public BankDaoPLSQLImpl() {
+	public BankDaoPLSQL() {
 		
 	}
 	
