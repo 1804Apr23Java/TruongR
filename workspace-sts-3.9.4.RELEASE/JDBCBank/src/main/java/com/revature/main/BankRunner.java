@@ -15,16 +15,22 @@ public class BankRunner {
 		BankClientDao bcDao = new BankClientDaoPLSQL();
 
 		try {
-			bcDao.deleteAccount(19);
-		} catch (MoneyInAccountException e) {
-			System.out.println("Error: account still has money left.");
+		bcDao.withdraw(349.00, 5);
+		} catch (OverdraftException e) {
+			System.out.println("Error: withdraw amount larger than current balance.");
 		}
 		
-		try {
-			bcDao.deleteAccount(16);
-		} catch (MoneyInAccountException e) {
-			System.out.println("Error: account still has money left.");
-		}
+//		try {
+//			bcDao.deleteAccount(19);
+//		} catch (MoneyInAccountException e) {
+//			System.out.println("Error: account still has money left.");
+//		}
+//		
+//		try {
+//			bcDao.deleteAccount(16);
+//		} catch (MoneyInAccountException e) {
+//			System.out.println("Error: account still has money left.");
+//		}
 
 		// try (Scanner s = new Scanner(System.in)) {
 		//

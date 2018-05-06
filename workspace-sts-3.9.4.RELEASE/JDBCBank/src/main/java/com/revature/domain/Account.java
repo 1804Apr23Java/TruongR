@@ -4,7 +4,7 @@ public class Account {
 
 	@Override
 	public String toString() {
-		return "Account [accountID=" + accountID + ", balance=" + balance + "]";
+		return "Account [accountID=" + getAccountID() + ", balance=" + balance + "]";
 	}
 
 	private final int accountID;
@@ -22,6 +22,10 @@ public class Account {
 
 	public void setBalance(double balance) {
 		this.balance = balance;
+	}
+
+	public int getAccountID() {
+		return accountID;
 	}
 
 }
