@@ -18,8 +18,6 @@ public class BankRunner {
 
 		try (Scanner s = new Scanner(System.in)) {
 
-			boolean credentialsValid = false;
-
 			System.out.println("Welcome to JDBC Bank. Select an option.");
 			System.out.println("1.\tLog into account.");
 			System.out.println("2.\tCreate account.");
@@ -35,11 +33,11 @@ public class BankRunner {
 
 				case 1:
 					// prompt for username and password
-					logIn(s, dao);
+					logIn(s, aDao, bcDao);
 					break;
 				case 2:
 					// prompt for username and password
-					registerUser(s, dao);
+					registerUser(s, aDao, bcDao);
 					break;
 				case 3:
 					System.out.println("Goodbye.");
@@ -65,8 +63,8 @@ public class BankRunner {
 	}
 
 	private static void logIn(Scanner s, AdminDao aDao, BankClientDao bcDao) {
-
-		while (true) {
+		int counter = 0;
+		while (counter < 5) {
 			String username, password;
 			System.out.print("Input username: ");
 			username = s.next();
@@ -74,28 +72,62 @@ public class BankRunner {
 			password = s.next();
 			try {
 
-			} catch (IncorrectUsernameException e) {
-				System.out.println("Error: Username not found in database.");
-			} catch (IncorrectPasswordException e) {
-				System.out.println("Error: Password incorrect.");
+				int adminID = aDao.loginAdmin(username, password);
+				int userID = aDao.loginUser(username, password);
+				if (adminID != 0) {
+					System.out.println("Credentials accepted. Welcome, admin " + username + ".");
+					runAsAdmin(adminID, aDao, bcDao);
+				} else if (userID != 0) {
+					System.out.println("Credentials accepted. Welcome, client " + username + ".");
+					runAsClient(userID, aDao, bcDao);
+				} else {
+					throw new IncorrectCredentialsException();
+				}
+
+			} catch (IncorrectCredentialsException e) {
+				counter++;
+				System.out.println("Error: Credentials invalid. You have " + (MAX_TRIES - counter) + " tries left.");
 			}
+
 		}
+		System.out.println("Error: Too many failed login attempts.");
+		System.exit(1);
 	}
 
 	private static void registerUser(Scanner s, AdminDao aDao, BankClientDao bcDao) {
-
-		while (true) {
+		int counter = 0;
+		while (counter < MAX_TRIES) {
 			String username, password;
 			System.out.print("Input new username: ");
 			username = s.next();
 			System.out.print("Input new password: ");
 			password = s.next();
 			try {
-				dao.registerNewUser(username, password);
+				System.out.println("Credentials accepted. Welcome, client " + username + ".");
+				int userID = aDao.createBankClient(username, password);
+				runAsClient(userID, aDao, bcDao);
 			} catch (UsernameAlreadyUsedException e) {
-				System.out.println("Error: Username already exists in database.");
+				counter++;
+				System.out.println(
+						"Error: Username already exists in database. " + (MAX_TRIES - counter) + " tries remaining.");
 			}
 		}
+		System.out.println("Error: Too many failed registration attempts.");
+		System.exit(1);
 
+	}
+
+	private static void runAsClient(int userID, AdminDao aDao, BankClientDao bcDao) {
+		System.out.println("You are a client!");
+		boolean running = true;
+		
+		System.exit(0);
+	}
+
+	private static void runAsAdmin(int adminID, AdminDao aDao, BankClientDao bcDao) {
+		System.out.println("You are an admin!");
+		boolean running = true;
+		
+		System.exit(0);
 	}
 }

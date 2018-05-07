@@ -13,31 +13,21 @@ public class AdminDaoPLSQL implements AdminDao {
 	private String filename = "connection.properties";
 
 	@Override
-	public Admin loginAdmin(String username, String password) {
+	public int loginUser(String username, String password) {
 
-		Admin admin = null;
+		int validAdmin = 0;
 		PreparedStatement pstmt = null;
 
 		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
 
-			String sql = "SELECT * FROM ADMINUSERNAME = ? AND ADMINPASSWORD = >";
+			String sql = "SELECT * FROM BANKCLIENT WHERE USERNAME = ? AND PASSWORD = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, username);
 			pstmt.setString(2, password);
 			ResultSet rs = pstmt.executeQuery();
 			
 			if (rs.next()) {
-				String username = rs.getString("USERNAME");
-				String password = rs.getString("PASSWORD");
-				sql = "SELECT * FROM ACCOUNT WHERE BANKCLIENTID = ?";
-				pstmt = con.prepareStatement(sql);
-				pstmt.setInt(1, bankClientID);
-				rs = pstmt.executeQuery();
-				List<Account> accountList = new ArrayList<Account>();
-
-				while (rs.next()) {
-					accountList.add(new Account(rs.getInt("ACCOUNTID"), rs.getDouble("ACCOUNTBALANCE")));
-				}
+				validAdmin = rs.getInt("BANKCLIENTID");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -45,7 +35,33 @@ public class AdminDaoPLSQL implements AdminDao {
 			e.printStackTrace();
 		}
 
-		return admin;
+		return validAdmin;
+	}
+	
+	@Override
+	public int loginAdmin(String username, String password) {
+
+		int validAdmin = 0;
+		PreparedStatement pstmt = null;
+
+		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
+
+			String sql = "SELECT * FROM ADMIN WHERE ADMINUSERNAME = ? AND ADMINPASSWORD = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, username);
+			pstmt.setString(2, password);
+			ResultSet rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				validAdmin = rs.getInt("ADMINID");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return validAdmin;
 	}
 
 	@Override
@@ -158,7 +174,7 @@ public class AdminDaoPLSQL implements AdminDao {
 				throw new BankClientNotFoundException();
 			}
 
-			sql = "SELECT USERNAME FROM BANKCLIENT";
+			sql = "SELECT USERNAME FROM BANKCLIENT UNION SELECT ADMINUSERNAME FROM ADMIN";
 			pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 
@@ -222,12 +238,13 @@ public class AdminDaoPLSQL implements AdminDao {
 	}
 
 	@Override
-	public void createBankClient(String username, String password) throws UsernameAlreadyUsedException {
+	public int createBankClient(String username, String password) throws UsernameAlreadyUsedException {
 		PreparedStatement pstmt = null;
+		int bcID = 0;
 
 		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
 
-			String sql = "SELECT USERNAME FROM BANKCLIENT";
+			String sql = "SELECT USERNAME FROM BANKCLIENT UNION SELECT ADMINUSERNAME FROM ADMIN";
 			pstmt = con.prepareStatement(sql);
 			ResultSet rs = pstmt.executeQuery();
 
@@ -243,11 +260,22 @@ public class AdminDaoPLSQL implements AdminDao {
 			pstmt.setString(2, password);
 			rs = pstmt.executeQuery();
 
+			sql = "SELECT BANKCLIENTID FROM BANKCLIENT WHERE USERNAME = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, username);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				bcID = rs.getInt("BANKCLIENTID");
+			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		return bcID;
 	}
 
 	@Override
