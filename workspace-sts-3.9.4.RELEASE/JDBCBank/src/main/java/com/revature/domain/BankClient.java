@@ -42,7 +42,7 @@ public class BankClient {
 		if (getAccountList().isEmpty())
 			s.append("No accounts found.");
 		
-		return s.toString();
+		return s.toString().trim();
 	}
 
 	public List<Account> getAccountList() {

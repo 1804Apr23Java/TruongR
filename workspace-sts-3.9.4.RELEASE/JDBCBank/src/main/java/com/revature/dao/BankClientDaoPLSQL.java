@@ -118,7 +118,7 @@ public class BankClientDaoPLSQL implements BankClientDao {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, accountId);
 			rs = pstmt.executeQuery();
-			System.out.printf("Deleted Account %09d./n1", accountId);
+			System.out.printf("Deleted Account %09d", accountId);
 
 		} catch (AccountNotFoundException e) {
 			// Should not actually be called in actual run

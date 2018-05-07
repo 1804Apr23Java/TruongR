@@ -104,8 +104,8 @@ public class BankRunner {
 			System.out.print("Input new password: ");
 			password = s.next();
 			try {
-				System.out.println("Credentials accepted. Welcome, client " + username + ".");
 				int userID = aDao.createBankClient(username, password);
+				System.out.println("Credentials accepted. Welcome, client " + username + ".");
 				runAsClient(userID, s, aDao, bcDao);
 			} catch (UsernameAlreadyUsedException e) {
 				counter++;
@@ -222,6 +222,7 @@ public class BankRunner {
 				break;
 			default:
 				System.out.println("Invalid option selected.");
+				break;
 			}
 		}
 
@@ -230,7 +231,104 @@ public class BankRunner {
 
 	private static void runAsAdmin(int adminID, Scanner s, AdminDao aDao, BankClientDao bcDao) {
 		System.out.println("You are an admin!");
+		int option, accID, userID;
+		String newUsername, newPassword;
+
 		boolean running = true;
+		while (running) {
+			System.out.println("Please select an option from below:");
+			System.out.println("1. Retrieve information on a bank client.");
+			System.out.println("2. Retrieve information on all bank clients.");
+			System.out.println("3. Change a client's username.");
+			System.out.println("4. Change a client's password.");
+			System.out.println("5. Create a new client.");
+			System.out.println("6. Delete a client.");
+			System.out.println("7. Logout.");
+
+			option = s.nextInt();
+
+			switch (option) {
+			case 1:
+				System.out.println("Please enter the ID of the client you would like to view.");
+
+				accID = s.nextInt();
+
+				System.out.printf("Attempting to retrieve information on user %09d.\n", accID);
+				BankClient bc = aDao.getBankClient(accID);
+
+				if (bc == null)
+					System.out.println("No user with that ID found.");
+				else
+					System.out.println(bc);
+
+				break;
+			case 2:
+				System.out.println("Printing information on all bank clients.");
+				List<BankClient> userList = aDao.getAllBankClients();
+				for (BankClient b : userList)
+					System.out.println(b);
+				break;
+			case 3:
+				System.out.println("Please enter the ID of the client whose username you wish to change.");
+
+				userID = s.nextInt();
+
+				System.out.println("Please enter the new username you wish to change this to.");
+
+				newUsername = s.next();
+
+				try {
+					System.out.println("Updating.");
+					aDao.updateBankClientUsername(userID, newUsername);
+				} catch (UsernameAlreadyUsedException e) {
+					System.out.println("Error: Username in use by someone else.");
+				}
+
+				break;
+			case 4:
+				System.out.println("Please enter the ID of the client whose password you wish to change.");
+				userID = s.nextInt();
+
+				System.out.println("Please enter the new password you wish to change this to.");
+				newPassword = s.next();
+
+				System.out.println("Updating.");
+				aDao.updateBankClientPassword(userID, newPassword);
+				break;
+			case 5:
+				System.out.println("Please enter the username of the new client.");
+				newUsername = s.next();
+
+				System.out.println("Please enter the password of the new client.");
+				newPassword = s.next();
+
+				try {
+					userID = aDao.createBankClient(newUsername, newPassword);
+					System.out.println("Account created.");
+				} catch (UsernameAlreadyUsedException e) {
+					System.out.println("Error: Username already exists in database.");
+				}
+
+				break;
+			case 6:
+				
+				System.out.println("Please enter the ID of the client you wish to delete.");
+				userID = s.nextInt();
+				
+				aDao.deleteBankClient(userID);
+				
+				System.out.println("Deleted client and his data.");
+				
+				break;
+			case 7:
+				System.out.println("Thank you for using JDBC Bank. Have a fantastic day.");
+				running = false;
+				break;
+			default:
+				System.out.println("Invalid option selected.");
+				break;
+			}
+		}
 
 		System.exit(0);
 	}

@@ -99,9 +99,7 @@ public class AdminDaoPLSQL implements AdminDao {
 			}
 
 		} catch (BankClientNotFoundException e) {
-			// Should not actually be called in actual run
 			System.out.println("Error: Attempted to access nonexistent client.");
-			System.exit(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -192,9 +190,7 @@ public class AdminDaoPLSQL implements AdminDao {
 			rs = pstmt.executeQuery();
 
 		} catch (BankClientNotFoundException e) {
-			// Should not actually be called in actual run
 			System.out.println("Error: Attempted to access nonexistent client.");
-			System.exit(1);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -226,9 +222,7 @@ public class AdminDaoPLSQL implements AdminDao {
 			rs = pstmt.executeQuery();
 
 		} catch (BankClientNotFoundException e) {
-			// Should not actually be called in actual run
 			System.out.println("Error: Attempted to access nonexistent client.");
-			System.exit(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -284,6 +278,8 @@ public class AdminDaoPLSQL implements AdminDao {
 
 		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
 
+
+			
 			String sql = "SELECT * FROM BANKCLIENT WHERE BANKCLIENTID = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, bankClientID);
@@ -293,15 +289,19 @@ public class AdminDaoPLSQL implements AdminDao {
 				throw new BankClientNotFoundException();
 			}
 
+			sql = "DELETE FROM ACCOUNT WHERE BANKCLIENTID = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bankClientID);
+			rs = pstmt.executeQuery();
+
+			
 			sql = "DELETE FROM BANKCLIENT WHERE BANKCLIENTID = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, bankClientID);
 			rs = pstmt.executeQuery();
 
 		} catch (BankClientNotFoundException e) {
-			// Should not actually be called in actual run
 			System.out.println("Error: Attempted to access nonexistent client.");
-			System.exit(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
