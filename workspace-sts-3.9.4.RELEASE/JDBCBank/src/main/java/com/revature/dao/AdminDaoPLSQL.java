@@ -13,6 +13,42 @@ public class AdminDaoPLSQL implements AdminDao {
 	private String filename = "connection.properties";
 
 	@Override
+	public Admin loginAdmin(String username, String password) {
+
+		Admin admin = null;
+		PreparedStatement pstmt = null;
+
+		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
+
+			String sql = "SELECT * FROM ADMINUSERNAME = ? AND ADMINPASSWORD = >";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, username);
+			pstmt.setString(2, password);
+			ResultSet rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				String username = rs.getString("USERNAME");
+				String password = rs.getString("PASSWORD");
+				sql = "SELECT * FROM ACCOUNT WHERE BANKCLIENTID = ?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, bankClientID);
+				rs = pstmt.executeQuery();
+				List<Account> accountList = new ArrayList<Account>();
+
+				while (rs.next()) {
+					accountList.add(new Account(rs.getInt("ACCOUNTID"), rs.getDouble("ACCOUNTBALANCE")));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return admin;
+	}
+
+	@Override
 	public BankClient getBankClient(int bankClientID) {
 
 		BankClient client = null;

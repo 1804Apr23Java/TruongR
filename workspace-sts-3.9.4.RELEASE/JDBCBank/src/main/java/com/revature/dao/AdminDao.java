@@ -6,6 +6,8 @@ import com.revature.domain.*;
 
 public interface AdminDao {
 	
+	
+	public Admin loginAdmin(String username, String password);
 	public BankClient getBankClient(int bankClientID);
 	public List<BankClient> getAllBankClients();
 	public void updateBankClientUsername(int bankClientID, String newUsername) throws UsernameAlreadyUsedException;
