@@ -6,7 +6,7 @@ import com.revature.domain.*;
 
 public interface AdminDao {
 
-	public int loginUser(String username, String password);
+	public int loginBankClient(String username, String password);
 	public int loginAdmin(String username, String password);
 	
 	

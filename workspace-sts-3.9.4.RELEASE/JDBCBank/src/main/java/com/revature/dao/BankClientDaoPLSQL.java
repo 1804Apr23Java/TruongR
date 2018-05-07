@@ -11,36 +11,37 @@ public class BankClientDaoPLSQL implements BankClientDao {
 	private String filename = "connection.properties";
 
 	@Override
-	public Account createAccount(int bankClientId, double startingValue) {
-
+	public Account createAccount(int bankClientID) {
+		/*
+		 * Makes an account with no money in it.
+		 */
+		
 		Account account = null;
 		PreparedStatement pstmt = null;
 		CallableStatement cstmt = null;
 
 		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
 
-			// use a prepared statement
 			String sql = "INSERT INTO ACCOUNT (ACCOUNTBALANCE, BANKCLIENTID) VALUES (?, ?)";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setDouble(1, startingValue);
-			pstmt.setInt(2, bankClientId);
+			pstmt.setDouble(1, 0.0);
+			pstmt.setInt(2, bankClientID);
 			ResultSet rs = pstmt.executeQuery();
 
 			sql = "SELECT * FROM ACCOUNT WHERE " + "ACCOUNTBALANCE = ? AND "
 					+ "BANKCLIENTID = ? ORDER BY ACCOUNTID DESC";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setDouble(1, startingValue);
-			pstmt.setInt(2, bankClientId);
+			pstmt.setDouble(1, 0.0);
+			pstmt.setInt(2, bankClientID);
 			rs = pstmt.executeQuery();
 
-			// do something with result
 			if (rs.next()) {
 				account = new Account(rs.getInt("ACCOUNTID"), rs.getDouble("ACCOUNTBALANCE"));
 
 				sql = "{call tx_insert(?,?)}";
 				cstmt = con.prepareCall(sql);
-				cstmt.setInt(1, bankClientId);
-				cstmt.setString(2, String.format("Created Account %09d", account.getAccountID()));
+				cstmt.setInt(1, bankClientID);
+				cstmt.setString(2, String.format("Created account %09d", account.getAccountID()));
 				cstmt.executeUpdate();
 			}
 
@@ -57,13 +58,12 @@ public class BankClientDaoPLSQL implements BankClientDao {
 		return account;
 	}
 
-	@Override
-	public Account createAccount(int bankClientId) {
-		return createAccount(bankClientId, 0);
-	}
 
 	@Override
-	public void viewAccounts(int bankClientId) {
+	public void viewAccounts(int bankClientID) {
+		/*
+		 * Prints out all of the bankClient's accounts.
+		 */
 		Account account = null;
 		PreparedStatement pstmt = null;
 
@@ -73,10 +73,10 @@ public class BankClientDaoPLSQL implements BankClientDao {
 
 			String sql = "SELECT * FROM ACCOUNT WHERE BANKCLIENTID = ?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, bankClientId);
+			pstmt.setInt(1, bankClientID);
 			ResultSet rs = pstmt.executeQuery();
 
-			System.out.println("Printing accounts for BankClient " + bankClientId + ".");
+			System.out.println("Printing accounts for BankClient " + bankClientID + ".");
 			while (rs.next()) {
 				account = new Account(rs.getInt("ACCOUNTID"), rs.getDouble("ACCOUNTBALANCE"));
 				System.out.printf("Account ID %09d has $%.2f.\n", account.getAccountID(), account.getBalance());
@@ -95,21 +95,22 @@ public class BankClientDaoPLSQL implements BankClientDao {
 	}
 
 	@Override
-	public void deleteAccount(int bankClientId, int accountId) throws MoneyInAccountException {
+	public void deleteAccount(int bankClientID, int accountID) throws MoneyInAccountException {
+		/*
+		 * Deletes an empty account belonging to the user. That the accountID belongs to the
+		 * bankClient is a precondition.
+		 */
 		Account account = null;
 		PreparedStatement pstmt = null;
 		CallableStatement cstmt = null;
 
 		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
 
-			// use a prepared statement
-
 			String sql = "SELECT * FROM ACCOUNT WHERE " + "ACCOUNTID = ?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, accountId);
+			pstmt.setInt(1, accountID);
 			ResultSet rs = pstmt.executeQuery();
 
-			// do something with result
 			if (rs.next()) {
 				account = new Account(rs.getInt("ACCOUNTID"), rs.getDouble("ACCOUNTBALANCE"));
 			}
@@ -124,18 +125,18 @@ public class BankClientDaoPLSQL implements BankClientDao {
 
 			sql = "DELETE FROM ACCOUNT WHERE ACCOUNTID = ?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, accountId);
+			pstmt.setInt(1, accountID);
 			rs = pstmt.executeQuery();
-			System.out.printf("Deleted Account %09d\n", accountId);
+			System.out.printf("Deleted account %09d.\n", accountID);
 
 			sql = "{call tx_insert(?,?)}";
 			cstmt = con.prepareCall(sql);
-			cstmt.setInt(1, bankClientId);
-			cstmt.setString(2, String.format("Deleted Account %09d", accountId));
+			cstmt.setInt(1, bankClientID);
+			cstmt.setString(2, String.format("Deleted account %09d.", accountID));
 			cstmt.executeUpdate();
 
 		} catch (AccountNotFoundException e) {
-			// Should not actually be called in actual run
+			// Should not actually be able to be called in actual run
 			System.out.println("Error: Attempted to delete account that does not exist in database.");
 			System.exit(1);
 		} catch (SQLException e) {
@@ -147,7 +148,11 @@ public class BankClientDaoPLSQL implements BankClientDao {
 	}
 
 	@Override
-	public void deposit(int bankClientId, double amt, int accountId) {
+	public void deposit(int bankClientID, double amt, int accountID) {
+		/*
+		 * Deposits money into one of the bankClient's accounts. The accountID belonging
+		 * to the bankClient is a precondition.
+		 */
 
 		PreparedStatement pstmt = null;
 		CallableStatement cstmt = null;
@@ -157,12 +162,12 @@ public class BankClientDaoPLSQL implements BankClientDao {
 			String sql = "UPDATE ACCOUNT SET ACCOUNTBALANCE = ACCOUNTBALANCE + ? WHERE ACCOUNTID = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setDouble(1, amt);
-			pstmt.setInt(2, accountId);
+			pstmt.setInt(2, accountID);
 			ResultSet rs = pstmt.executeQuery();
 
 			sql = "SELECT * FROM ACCOUNT WHERE " + "ACCOUNTID = ?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, accountId);
+			pstmt.setInt(1, accountID);
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
@@ -170,8 +175,8 @@ public class BankClientDaoPLSQL implements BankClientDao {
 
 				sql = "{call tx_insert(?,?)}";
 				cstmt = con.prepareCall(sql);
-				cstmt.setInt(1, bankClientId);
-				cstmt.setString(2, String.format("Deposited into account %09d $%.2f", accountId, amt));
+				cstmt.setInt(1, bankClientID);
+				cstmt.setString(2, String.format("Deposited $%.2f into account %09d", amt, accountID));
 				cstmt.executeUpdate();
 
 			} else {
@@ -191,7 +196,12 @@ public class BankClientDaoPLSQL implements BankClientDao {
 	}
 
 	@Override
-	public void withdraw(int bankClientId, double amt, int accountId) throws OverdraftException {
+	public void withdraw(int bankClientID, double amt, int accountID) throws OverdraftException {
+		/*
+		 * Attempts to withdraw from one of the bankClient's accounts, with exception
+		 * handling for overdrafts. The accountID belonging to the bankClient is a
+		 * precondition.
+		 */
 
 		PreparedStatement pstmt = null;
 		CallableStatement cstmt = null;
@@ -200,7 +210,7 @@ public class BankClientDaoPLSQL implements BankClientDao {
 
 			String sql = "SELECT * FROM ACCOUNT WHERE " + "ACCOUNTID = ?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, accountId);
+			pstmt.setInt(1, accountID);
 			ResultSet rs = pstmt.executeQuery();
 
 			if (rs.next()) {
@@ -214,21 +224,21 @@ public class BankClientDaoPLSQL implements BankClientDao {
 			sql = "UPDATE ACCOUNT SET ACCOUNTBALANCE = ACCOUNTBALANCE - ? WHERE ACCOUNTID = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setDouble(1, amt);
-			pstmt.setInt(2, accountId);
+			pstmt.setInt(2, accountID);
 			rs = pstmt.executeQuery();
 
 			sql = "SELECT * FROM ACCOUNT WHERE " + "ACCOUNTID = ?";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, accountId);
+			pstmt.setInt(1, accountID);
 			rs = pstmt.executeQuery();
 
 			if (rs.next()) {
 				System.out.printf("Your balance after this withdrawl is: $%.2f.\n", rs.getDouble("ACCOUNTBALANCE"));
-				
+
 				sql = "{call tx_insert(?,?)}";
 				cstmt = con.prepareCall(sql);
-				cstmt.setInt(1, bankClientId);
-				cstmt.setString(2, String.format("Withdrew from account %09d $%.2f", accountId, amt));
+				cstmt.setInt(1, bankClientID);
+				cstmt.setString(2, String.format("Withdrew $%.2f from account %09d", amt, accountID));
 				cstmt.executeUpdate();
 			} else {
 				throw new AccountNotFoundException();
@@ -247,29 +257,31 @@ public class BankClientDaoPLSQL implements BankClientDao {
 	}
 
 	@Override
-	public void getUserHistory(int bankClientId) {
+	public void getUserHistory(int bankClientID) {
+		/*
+		 * Takes in a bankClientID, and returns all records of transaction in the
+		 * transaction table.
+		 */
 
 		PreparedStatement pstmt = null;
-		
+
 		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
-		String sql = "SELECT * FROM TRANSACTIONS WHERE BANKCLIENTID = ? ORDER BY TX_TIME DESC";
-		pstmt = con.prepareStatement(sql);
-		pstmt.setInt(1,  bankClientId);
-		ResultSet rs = pstmt.executeQuery();
-		
-		while (rs.next()) {
-			String msg = rs.getString("MESSAGE");
-			String time = rs.getTime("TX_TIME").toString();
-			System.out.println("At " + time + ": " + msg);
-		}
-		
+			String sql = "SELECT * FROM TRANSACTIONS WHERE BANKCLIENTID = ? ORDER BY TX_TIME DESC";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bankClientID);
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				String msg = rs.getString("MESSAGE");
+				String time = rs.getTime("TX_TIME").toString();
+				System.out.println("At " + time + ": " + msg);
+			}
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	
 
 }

@@ -13,7 +13,11 @@ public class AdminDaoPLSQL implements AdminDao {
 	private String filename = "connection.properties";
 
 	@Override
-	public int loginUser(String username, String password) {
+	public int loginBankClient(String username, String password) {
+		/*
+		 * Validates a user's credentials, and returns their ID if it passes.
+		 * Otherwise returns 0.
+		 */
 
 		int validAdmin = 0;
 		PreparedStatement pstmt = null;
@@ -25,7 +29,7 @@ public class AdminDaoPLSQL implements AdminDao {
 			pstmt.setString(1, username);
 			pstmt.setString(2, password);
 			ResultSet rs = pstmt.executeQuery();
-			
+
 			if (rs.next()) {
 				validAdmin = rs.getInt("BANKCLIENTID");
 			}
@@ -37,10 +41,14 @@ public class AdminDaoPLSQL implements AdminDao {
 
 		return validAdmin;
 	}
-	
+
 	@Override
 	public int loginAdmin(String username, String password) {
-
+		/*
+		 * Validates an admin's credentials, and returns their ID if it passes.
+		 * Otherwise returns 0.
+		 */
+		
 		int validAdmin = 0;
 		PreparedStatement pstmt = null;
 
@@ -51,7 +59,7 @@ public class AdminDaoPLSQL implements AdminDao {
 			pstmt.setString(1, username);
 			pstmt.setString(2, password);
 			ResultSet rs = pstmt.executeQuery();
-			
+
 			if (rs.next()) {
 				validAdmin = rs.getInt("ADMINID");
 			}
@@ -111,6 +119,9 @@ public class AdminDaoPLSQL implements AdminDao {
 
 	@Override
 	public List<BankClient> getAllBankClients() {
+		/*
+		 * Returns a List of every BankClient in the database.
+		 */
 
 		List<BankClient> listOfClients = new ArrayList<BankClient>();
 
@@ -158,7 +169,12 @@ public class AdminDaoPLSQL implements AdminDao {
 	}
 
 	@Override
-	public void updateBankClientUsername(int bankClientID, String newUsername) throws UsernameAlreadyUsedException {
+	public void updateBankClientUsername(int bankClientID, String newUsername) 
+			throws UsernameAlreadyUsedException {
+		/*
+		 * Changes a bankClient's username, but throws an exception if it's a duplicate username.
+		 */
+		
 		PreparedStatement pstmt = null;
 
 		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
@@ -202,6 +218,10 @@ public class AdminDaoPLSQL implements AdminDao {
 
 	@Override
 	public void updateBankClientPassword(int bankClientID, String newPassword) {
+		/*
+		 * Changes a bankClient's password to the newPassword.
+		 */
+
 		PreparedStatement pstmt = null;
 
 		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
@@ -233,8 +253,12 @@ public class AdminDaoPLSQL implements AdminDao {
 
 	@Override
 	public int createBankClient(String username, String password) throws UsernameAlreadyUsedException {
+		/*
+		 * Makes a bankClient and returns its ID.
+		 */
+
 		PreparedStatement pstmt = null;
-		int bcID = 0;
+		int bankClientID = 0;
 
 		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
 
@@ -258,28 +282,30 @@ public class AdminDaoPLSQL implements AdminDao {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, username);
 			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				bcID = rs.getInt("BANKCLIENTID");
+
+			if (rs.next()) {
+				bankClientID = rs.getInt("BANKCLIENTID");
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		return bcID;
+		return bankClientID;
 	}
 
 	@Override
 	public void deleteBankClient(int bankClientID) {
+		/*
+		 * Deletes the bankClient of the specified bankclientID in the database. Does
+		 * multiple deletes to cascade the removal of constraints.
+		 */
 		PreparedStatement pstmt = null;
 
 		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
 
-
-			
 			String sql = "SELECT * FROM BANKCLIENT WHERE BANKCLIENTID = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, bankClientID);
@@ -293,13 +319,12 @@ public class AdminDaoPLSQL implements AdminDao {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, bankClientID);
 			rs = pstmt.executeQuery();
-			
 
 			sql = "DELETE FROM TRANSACTIONS WHERE BANKCLIENTID = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, bankClientID);
 			rs = pstmt.executeQuery();
-			
+
 			sql = "DELETE FROM BANKCLIENT WHERE BANKCLIENTID = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, bankClientID);
