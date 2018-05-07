@@ -1,5 +1,6 @@
 package com.revature.main;
 
+import java.util.List;
 import java.util.Scanner;
 
 import com.revature.dao.*;
@@ -13,12 +14,11 @@ public class BankRunner {
 		// TODO Auto-generated method stub
 
 		BankClientDao bcDao = new BankClientDaoPLSQL();
-
-		try {
-		bcDao.withdraw(349.00, 5);
-		} catch (OverdraftException e) {
-			System.out.println("Error: withdraw amount larger than current balance.");
-		}
+		AdminDao aDao = new AdminDaoPLSQL();
+		
+		List<BankClient> abc = aDao.getAllBankClients();
+		
+		System.out.print(abc);
 		
 //		try {
 //			bcDao.deleteAccount(19);
