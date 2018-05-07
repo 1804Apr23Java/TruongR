@@ -15,10 +15,36 @@ public class BankRunner {
 
 		BankClientDao bcDao = new BankClientDaoPLSQL();
 		AdminDao aDao = new AdminDaoPLSQL();
+	
+		aDao.deleteBankClient(12);
 		
-		List<BankClient> abc = aDao.getAllBankClients();
 		
-		System.out.print(abc);
+		/* try {
+			aDao.updateBankClientUsername(3, "Jordan1231");
+		} catch (UsernameAlreadyUsedException e) {
+			System.out.println("Error: Username Jordan1232 already used.");
+			e.printStackTrace();
+		} */
+		
+		/* try {
+			aDao.createBankClient("butts2", "butts2");
+		} catch (UsernameAlreadyUsedException e) {
+			System.out.println("Error: Username butts2 already used.");
+			e.printStackTrace();
+		} */
+		/*
+		try {
+			aDao.createBankClient("butts2", "butts2");
+		} catch (UsernameAlreadyUsedException e) {
+			System.out.println("Error: Username butts already used.");
+			e.printStackTrace();
+		} */
+		
+		//aDao.updateBankClientPassword(1, "AMrvel2017!?");
+		
+		
+		//System.out.println(aDao.getBankClient(1));
+		
 		
 //		try {
 //			bcDao.deleteAccount(19);

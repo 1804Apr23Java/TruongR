@@ -42,8 +42,14 @@ public class AdminDaoPLSQL implements AdminDao {
 				}
 
 				return new BankClient(username, password, accountList);
+			} else {
+				throw new BankClientNotFoundException();
 			}
 
+		} catch (BankClientNotFoundException e) {
+			// Should not actually be called in actual run
+			System.out.println("Error: Attempted to access nonexistent client.");
+			System.exit(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -102,27 +108,141 @@ public class AdminDaoPLSQL implements AdminDao {
 	}
 
 	@Override
-	public void updateBankClientUsername(int bankClientID, String newUsername) {
-		// TODO Auto-generated method stub
+	public void updateBankClientUsername(int bankClientID, String newUsername) throws UsernameAlreadyUsedException {
+		PreparedStatement pstmt = null;
+
+		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
+
+			String sql = "SELECT * FROM BANKCLIENT WHERE BANKCLIENTID = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bankClientID);
+			ResultSet rs = pstmt.executeQuery();
+
+			if (!rs.next()) {
+				throw new BankClientNotFoundException();
+			}
+
+			sql = "SELECT USERNAME FROM BANKCLIENT";
+			pstmt = con.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				String curUsername = rs.getString("USERNAME");
+				if (curUsername.equals(newUsername)) {
+					throw new UsernameAlreadyUsedException();
+				}
+			}
+
+			sql = "UPDATE BANKCLIENT SET USERNAME = ? WHERE BANKCLIENTID = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, newUsername);
+			pstmt.setInt(2, bankClientID);
+			rs = pstmt.executeQuery();
+
+		} catch (BankClientNotFoundException e) {
+			// Should not actually be called in actual run
+			System.out.println("Error: Attempted to access nonexistent client.");
+			System.exit(1);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
 	@Override
 	public void updateBankClientPassword(int bankClientID, String newPassword) {
-		// TODO Auto-generated method stub
+		PreparedStatement pstmt = null;
+
+		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
+
+			String sql = "SELECT * FROM BANKCLIENT WHERE BANKCLIENTID = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bankClientID);
+			ResultSet rs = pstmt.executeQuery();
+
+			if (!rs.next()) {
+				throw new BankClientNotFoundException();
+			}
+
+			sql = "UPDATE BANKCLIENT SET PASSWORD = ? WHERE BANKCLIENTID = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, newPassword);
+			pstmt.setInt(2, bankClientID);
+			rs = pstmt.executeQuery();
+
+		} catch (BankClientNotFoundException e) {
+			// Should not actually be called in actual run
+			System.out.println("Error: Attempted to access nonexistent client.");
+			System.exit(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 	}
 
 	@Override
-	public void createBankClient(int bankClientID, String username, String password) {
-		// TODO Auto-generated method stub
+	public void createBankClient(String username, String password) throws UsernameAlreadyUsedException {
+		PreparedStatement pstmt = null;
 
+		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
+
+			String sql = "SELECT USERNAME FROM BANKCLIENT";
+			pstmt = con.prepareStatement(sql);
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				if (rs.getString("USERNAME").equals(username)) {
+					throw new UsernameAlreadyUsedException();
+				}
+			}
+
+			sql = "INSERT INTO BANKCLIENT (USERNAME, PASSWORD) VALUES (?, ?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, username);
+			pstmt.setString(2, password);
+			rs = pstmt.executeQuery();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void deleteBankClient(int bankClientID) {
-		// TODO Auto-generated method stub
+		PreparedStatement pstmt = null;
 
+		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
+
+			String sql = "SELECT * FROM BANKCLIENT WHERE BANKCLIENTID = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bankClientID);
+			ResultSet rs = pstmt.executeQuery();
+
+			if (!rs.next()) {
+				throw new BankClientNotFoundException();
+			}
+
+			sql = "DELETE FROM BANKCLIENT WHERE BANKCLIENTID = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bankClientID);
+			rs = pstmt.executeQuery();
+
+		} catch (BankClientNotFoundException e) {
+			// Should not actually be called in actual run
+			System.out.println("Error: Attempted to access nonexistent client.");
+			System.exit(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
