@@ -15,6 +15,7 @@ public class BankClientDaoPLSQL implements BankClientDao {
 
 		Account account = null;
 		PreparedStatement pstmt = null;
+		CallableStatement cstmt = null;
 
 		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
 
@@ -35,6 +36,12 @@ public class BankClientDaoPLSQL implements BankClientDao {
 			// do something with result
 			if (rs.next()) {
 				account = new Account(rs.getInt("ACCOUNTID"), rs.getDouble("ACCOUNTBALANCE"));
+
+				sql = "{call tx_insert(?,?)}";
+				cstmt = con.prepareCall(sql);
+				cstmt.setInt(1, bankClientId);
+				cstmt.setString(2, String.format("Created Account %09d", account.getAccountID()));
+				cstmt.executeUpdate();
 			}
 
 		} catch (SQLIntegrityConstraintViolationException e) {
@@ -88,9 +95,10 @@ public class BankClientDaoPLSQL implements BankClientDao {
 	}
 
 	@Override
-	public void deleteAccount(int accountId) throws MoneyInAccountException {
+	public void deleteAccount(int bankClientId, int accountId) throws MoneyInAccountException {
 		Account account = null;
 		PreparedStatement pstmt = null;
+		CallableStatement cstmt = null;
 
 		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
 
@@ -118,7 +126,13 @@ public class BankClientDaoPLSQL implements BankClientDao {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, accountId);
 			rs = pstmt.executeQuery();
-			System.out.printf("Deleted Account %09d", accountId);
+			System.out.printf("Deleted Account %09d\n", accountId);
+
+			sql = "{call tx_insert(?,?)}";
+			cstmt = con.prepareCall(sql);
+			cstmt.setInt(1, bankClientId);
+			cstmt.setString(2, String.format("Deleted Account %09d", accountId));
+			cstmt.executeUpdate();
 
 		} catch (AccountNotFoundException e) {
 			// Should not actually be called in actual run
@@ -133,9 +147,10 @@ public class BankClientDaoPLSQL implements BankClientDao {
 	}
 
 	@Override
-	public void deposit(double amt, int accountId) {
+	public void deposit(int bankClientId, double amt, int accountId) {
 
 		PreparedStatement pstmt = null;
+		CallableStatement cstmt = null;
 
 		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
 
@@ -152,6 +167,13 @@ public class BankClientDaoPLSQL implements BankClientDao {
 
 			if (rs.next()) {
 				System.out.printf("Your balance after this deposit is: $%.2f.\n", rs.getDouble("ACCOUNTBALANCE"));
+
+				sql = "{call tx_insert(?,?)}";
+				cstmt = con.prepareCall(sql);
+				cstmt.setInt(1, bankClientId);
+				cstmt.setString(2, String.format("Deposited into account %09d $%.2f", accountId, amt));
+				cstmt.executeUpdate();
+
 			} else {
 				throw new AccountNotFoundException();
 			}
@@ -169,9 +191,10 @@ public class BankClientDaoPLSQL implements BankClientDao {
 	}
 
 	@Override
-	public void withdraw(double amt, int accountId) throws OverdraftException {
+	public void withdraw(int bankClientId, double amt, int accountId) throws OverdraftException {
 
 		PreparedStatement pstmt = null;
+		CallableStatement cstmt = null;
 
 		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
 
@@ -201,6 +224,12 @@ public class BankClientDaoPLSQL implements BankClientDao {
 
 			if (rs.next()) {
 				System.out.printf("Your balance after this withdrawl is: $%.2f.\n", rs.getDouble("ACCOUNTBALANCE"));
+				
+				sql = "{call tx_insert(?,?)}";
+				cstmt = con.prepareCall(sql);
+				cstmt.setInt(1, bankClientId);
+				cstmt.setString(2, String.format("Withdrew from account %09d $%.2f", accountId, amt));
+				cstmt.executeUpdate();
 			} else {
 				throw new AccountNotFoundException();
 			}
@@ -216,5 +245,31 @@ public class BankClientDaoPLSQL implements BankClientDao {
 		}
 
 	}
+
+	@Override
+	public void getUserHistory(int bankClientId) {
+
+		PreparedStatement pstmt = null;
+		
+		try (Connection con = ConnectionUtil.getConnectionFromFile(filename)) {
+		String sql = "SELECT * FROM TRANSACTIONS WHERE BANKCLIENTID = ? ORDER BY TX_TIME DESC";
+		pstmt = con.prepareStatement(sql);
+		pstmt.setInt(1,  bankClientId);
+		ResultSet rs = pstmt.executeQuery();
+		
+		while (rs.next()) {
+			String msg = rs.getString("MESSAGE");
+			String time = rs.getTime("TX_TIME").toString();
+			System.out.println("At " + time + ": " + msg);
+		}
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
 
 }

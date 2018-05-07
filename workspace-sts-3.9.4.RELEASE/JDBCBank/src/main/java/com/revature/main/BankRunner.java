@@ -131,7 +131,8 @@ public class BankRunner {
 			System.out.println("3. Delete an empty account.");
 			System.out.println("4. Deposit.");
 			System.out.println("5. Withdraw from an account.");
-			System.out.println("6. Logout.");
+			System.out.println("6. View user history.");
+			System.out.println("7. Logout.");
 
 			double amount;
 			int option = s.nextInt();
@@ -155,7 +156,7 @@ public class BankRunner {
 
 					option = s.nextInt();
 
-					bcDao.deleteAccount(bc.getAccountList().get(option - 1).getAccountID());
+					bcDao.deleteAccount(userID, bc.getAccountList().get(option - 1).getAccountID());
 				} catch (MoneyInAccountException e) {
 					System.out.println("Error: Attempted to delete a non-empty account.");
 				} catch (NoAccountsException e) {
@@ -182,7 +183,7 @@ public class BankRunner {
 
 					amount = s.nextDouble();
 
-					bcDao.deposit(amount, accID);
+					bcDao.deposit(userID, amount, accID);
 
 				} catch (NoAccountsException e) {
 					System.out.println("Error: no accounts to delete from.");
@@ -206,7 +207,7 @@ public class BankRunner {
 					System.out.println("Enter the amount that you would like to withdraw.");
 
 					amount = s.nextDouble();
-					bcDao.withdraw(amount, accID);
+					bcDao.withdraw(userID, amount, accID);
 				} catch (OverdraftException e) {
 					System.out.println("Error: Attempted to withdraw more money than was in the account.");
 				} catch (NoAccountsException e) {
@@ -217,6 +218,10 @@ public class BankRunner {
 				bc = aDao.getBankClient(userID);
 				break;
 			case 6:
+				System.out.println("Printing user history:");
+				bcDao.getUserHistory(userID);
+				break;
+			case 7:
 				System.out.println("Thank you for using JDBC Bank. Have a fantastic day.");
 				running = false;
 				break;

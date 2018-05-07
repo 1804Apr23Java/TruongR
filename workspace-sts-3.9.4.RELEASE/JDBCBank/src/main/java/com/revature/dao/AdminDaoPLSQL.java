@@ -293,7 +293,12 @@ public class AdminDaoPLSQL implements AdminDao {
 			pstmt = con.prepareStatement(sql);
 			pstmt.setInt(1, bankClientID);
 			rs = pstmt.executeQuery();
+			
 
+			sql = "DELETE FROM TRANSACTIONS WHERE BANKCLIENTID = ?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bankClientID);
+			rs = pstmt.executeQuery();
 			
 			sql = "DELETE FROM BANKCLIENT WHERE BANKCLIENTID = ?";
 			pstmt = con.prepareStatement(sql);
