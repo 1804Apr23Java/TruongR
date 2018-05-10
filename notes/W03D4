@@ -1,0 +1,45 @@
+javascript 	- object-oriented
+		- interpreted, not compiled
+		- falsy/truthy values
+		- prototypal inheritance
+		- arrays - just objects, but sequential indices
+
+
+closure - using function scope to mimic encapsulation
+
+var count = 0;
+function add() { count++; };
+issue: count not encapsulated, anything can access it
+
+v2
+function add() { var count = 0; count++; return count;};
+problem: count always resets and returns 1, "too well encapsulated"
+
+v3
+function add(num) {var count = 0; function plus() {count++;} return count; }
+--better, but we still can't interact with count
+
+var add = (function(){var count = 0; return function() {return count++;};})();
+          ^---------------------------------------------------------------^ function declaration
+add(); -> count = 1, inner function getting called
+add is sort of equal to 
+
+simulating private variables
+outer function only called once, which sets count,
+and add is set to the return value of the anonymous self-invoking function
+
+JSON (Douglas Rockford) - javascript object notation -inspired by how we represent objects in JS
+language agnostic representation (like xml, csv, yml)
+
+JSON != JavaScript Objects, only inspired by it
+
+string-formatted in key-value pairs with curry braces
+keys: must be strings
+values: strings, #, booleans, objects, arrays
+
+{'person': {'name': 'Fred', 'age': 87}}
+avoid duplicate keys!
+
+JSON.parts to convert JSON -> JS object
+
+"documents" - form the basis for many nosql DBs

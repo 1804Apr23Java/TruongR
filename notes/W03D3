@@ -1,0 +1,165 @@
+JavaScript
+
+Not related to Java at all
+
+ES6 or ECMA script 6, but only 5 supported by everything for now
+
+Syntactically, a C language
+
+interpreted, not compiled
+	- line-by-line interpretation
+	- loosely typed
+	- errors tend to be silent
+	- but very lightweight
+	- first mainstream lambda-based language - functions as parameters
+	- has procedural elements
+	- object-oriented (object property-values pairs, dynamic)
+	- loosely typed - variable types are determined at runtime
+
+in Java - int a = 3, a = "three" - not okay
+in JavaScript - var a = 3, a = "three" - this is fine
+
+can use typeof to determine type of variable
+
+functions are also objects
+
+non-es6 js: no classes, so objects inherit directly from other objects -> prototype inheritance
+
+every object has property __proto__, there is a parent object
+
+Datatypes:
+primitives:
+
+Numbers:
+64-bit floating point - only truly accurate for multiples of 2
+0.3 - 0.2 != 0.1 - floating point error
+
+Strings:
+no separate char type, no string pool, 0 or more characters
+Angular + TypeScript want single quotes, but either fine in JS
+can create a string object with no constructor
+== to compare strings
+.length to define length
+
+Booleans: true and false, but also "truthy" and "falsy"
+
+falsy values (evaluate to false in conditional): false, 0, null, NaN, undefined (default), ""
+truthy values (evaluate to true in conditional): true, all nonfalsy things (including objects)
+
+undefined, null, and NaN their own types
+
+-----------
+
+objects: collection of property-value pairs
+names can be any string
+access members with either dot or subscript notation
+var x = {"name":"fred"};
+x.name or x["name"]
+dynamic - can add + remove properties
+
+other variable things:
+type coercion - interpreter will change type of object when needed (when not in strict mode)
+
+7 + 7 + 7 = 21
+7 + 7 + '7' = 147
+- after first string, all values converted to strings concatenated
+
+
+also on booleans:
+true == 1, false == NaN
+
+use ===, not == to prevent type coercion
+
+JavaScript:
+default operator: a || b - returns a if a is truthy
+guard operator: a && b - if a can be converted to a falsy value, return a
+ternary operator: a ? b: c
+
+--------
+
+var x;
+var a = false;
+var b = true;
+var c = true;
+var d = false;
+
+x = (a || b) ? ((c && d) ? 1 : 2) : 3;
+
+(b) ? ((d) ? 1 : 2) : 3;
+(b) ? (2) : 3;
+2
+
+---------------------------------
+
+
+function Person(name, fave_hobby, fave_color){this.name = name; this.fave_hobby = fave_hobby; this.fave_color = fave_color};
+
+var jow = new Person("Joe,"Scooters,"blue");
+
+
+
+
+
+function makePerson(name, fave_hobby, fave_color){var p = {}, p,name = p; p.fave_hobby = fave_hobby, p.fave_color = fave_color; return p;};
+
+or
+
+function makePerson2(name, fave_hobby, fave_color){var p = {"name":name, "fave_hobby":fave_hobby, "fave_color"=fave_color}; return p;};
+
+
+(loose typing)
+
+
+var array = [10, 20, 30]
+
+array[6] = 72 -> array = [10, 20, 30, empty = 6, 72]
+
+object creation
+object literal (preferred)
+
+{"prop1":"value", ...}
+object constructor
+function Person(name, hobby) {this.name = name; this.hobby = hobby;};
+maker function
+[fill in later]
+
+arrays - objects with properties named by integers
+
+can access by index, have length member, useful for looping
+
+overloading? cannot, if function gets too few inputs it sets the remaining to undefined
+
+functions - objects that do things
+
+take params (but no overloading)
+can have properties
+ignore extra variables, if too few variables given sets remaining undefined
+function which belongs to an object - method
+every function has a "this" property, what it refers to depends on invocation form
+
+func()
+"this" -> gloval object, in browser -> window
+
+constructor form - new Func()
+"this" -> object being created
+best practices - capitalize constructor
+method form - someObject.func()
+
+in browser, build calculator function in console, +, - , *, /
+finish up bootstrap
+
+
+pre-es6 variable scopes
+
+function scope
+- things declared in a function, accessible only withinfunction
+- use var keyword
+global scope
+- declared outside of a function.
+- Accessible anywhere.
+watch out - implicit globals (declared w/o var)
+unless in strict mode
+
+shadowing in js
+
+

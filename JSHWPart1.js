@@ -50,7 +50,6 @@ homework.merge = function(array1, array2) {
         else {
             mergeArray.push(array2.shift());
         }
-        //console.log("mergearray:" + mergeArray + "\t a1:" + array1 + "\t a2:" + array2);
     }
     return mergeArray;
 };
@@ -61,14 +60,11 @@ homework.sort = function(array) {
         return undefined;
     }
     var mid = Math.floor(array.length / 2);
-    //console.log("mid: " + mid + ", len: " + array.length);
     if (array.length <= 1)
         return array;
     else
         var array1 = homework.sort(array.slice(0, mid));
         var array2 = homework.sort(array.slice(mid, array.length));
-        //console.log("ar1: " + array1);
-        //console.log("ar2: " + array2);
         return homework.merge(array1, array2);
 };
 
@@ -110,11 +106,9 @@ homework.rotateLeft = function(array, n) {
         return undefined;
     }
     var i;
-    //console.log('array = ' + array);
     n %= array.length; //reduces number of rotations
     for (i = 0; i < n; i++) {
         array.push(array.shift());
-        //console.log('array = ' + array);
     }
     return array;
 };
@@ -178,8 +172,12 @@ homework.balancedBrackets = function(bracketsString){
                 return undefined;
         }
     }
-    if (stack.length > 0)
-        return false;
-    else
-        return true;
+    return (stack.length == 0) ? true : false;
 };
+
+//silly one-line inefficient version of above
+homework.balancedBrackets2 = function(bracketsString) {
+    return (bracketsString.match(/\[\]|\(\)|{}/g) != null) 
+        ? this.balancedBrackets2(bracketsString.replace(/\[\]|\(\)|{}/g, ""))
+        : (bracketsString.length == 0);
+}
