@@ -1,0 +1,197 @@
+Subqueries
+---
+queries nested within the where clause of another query to further narrow the result set
+
+two types:
+1. noncorrelated - inner query can execute independently of outer query.
+
+STUDENT
+---
+S_ID
+S_NAME
+MAJOR_ID
+
+MAJOR
+---
+MAJOR_ID
+MAJOR_NAME
+
+For all names of students majoring in history
+
+SELECT S_NAME FROM STUDENT WHERE MAJOR_ID IN (
+	SELECT MAJOR_ID FROM MAJOR WHERE MAJOR_NAME = 'History');
+
+2. correlated - inner query cannot execute independently
+
+ORDER
+---
+O_ID (PK)
+P_ID (FK)
+QUANTITY
+
+PRODUCT
+---
+P_ID (PK)
+P_NAME
+
+------------------------------
+
+Other DML syntax
+
+INSERT INTO [TABLENAME] [COLUMN LIST] 
+(QUERY) - VALUES STATEMENT (Can use DEFAULT)
+	- SELECT STATEMENT
+	- UNION EXPRESSION;
+	
+UPDATE [TABLENAME] SET [COLUMN] = [VALUE] WHERE [CONDITION];
+can update multiple colums in same state
+
+DELETE FROM [TABLENAME] WHERE [CONDITION];
+
+DDL syntax
+
+CREATE TABLE [TABLENAME] ([COLUMN DEF] | TABLE-LEVEL CONSTRAINT],
+				...); (choice 1)
+or			 ([COLUMN_LIST] AS [QUERY_RESULT] WITH NO DATA); (choice 2)
+
+ALTER TABLE [TABLENAME] ADD [COLUMN DEFINITION] |
+			ADD [CONSTRAINT CLAUSE] |
+			DROP [COLUMN] [CASCADE] |
+			DROP [CONSTRAINT NAME (PK, FK, UNIQUE, CHECK, CUSTOM CONSTRAINTS)] |
+			ALTER [COLUMN] [COL. ALTERATION];
+
+make sure the thing you're altering is not violating the rule you're putting in place
+
+TRUNCATE - removes all data but keeps structure
+
+TRUNCATE TABLE
+
+No triggers fired with truncate, can't rollback, not the same as deleting w/0 a where clause.
+quick purge, want to use delete for controlled remove
+
+DROP - removes structural element w/ all data
+(TABLE, COLUMN, CONSTRAINT, SEQUENCE, TRIGGER, USER, etc.)
+
+
+------------------------------
+
+
+Triggers and Sequences
+---
+
+SEQUENCES - good for primary key management
+
+CREATE SEQUENCE [SQ_NAME] MIN_VALUE [VALUE] MAX_VALUE [VALUE] START WITH [VALUE] INCREMENT BY [VALUE] CACHE [VALUE];
+---
+
+TRIGGERS
+blocks of code which are automatically executed when events happen
+
+specify which DML you're responding to (insert/update/delete) and whether trigger should fire before or after
+
+INDEX
+applied an index to a column to enforce a physical ordering in memory
+speed up searching, slow down insertion
+CREATE INDEX [INDEX NAME0 ON [TABLE_NAME] (COLUMN_NAME) ASC|DESC
+
+UNIQUE, PK, FG CONSTRAINTS CREATE "BACKING INDEX" (implicitly generated)
+
+------------------------------
+
+Transactions 	- units of work done on a database
+		- can include many dml operations
+		TCK - Transaction Control Language
+	
+		COMMIT - save changes
+		ROLLBACK - discard changes since last commit
+		SAVEPOINT - a point to which to rollback
+
+Transaction properties:
+ACID - atomicity, consistency, isolation, durability
+
+Atomicity - either all operations in a transaction execute, or none of them do. (Or if there's a controlled check like with a savepoint.) No commit is made.
+Consistency - database is in a valid state according to structure and constraints once commit is made.
+Isolation - system state during concurrent transactions is the same as if they were sequential.
+Durability - all commits are final - even if system failure happens commit data is fine.
+
+
+Isolation Problems:
+dirty read - 		session 1 begins a transaction, changes data
+			session 2 reads session 1's uncommited data
+			session 1 rolls back, session 2's data is invalid
+
+nonrepeatable read -	session 1 reads row of data
+			meanwhile, session 2 changes that same data and commits
+			session 1 tries to access same row again, and fails
+
+phantom read - 		session 1 begins a transaction, executes a query
+			session 2 inserts data matching the query and commits
+			if session 1 returns query it sees "phantom data"
+
+What to do? set isolation value.
+Isolation levels	Problems: 	dirty		nonrepeatable	phantom	
+-------------------------------------------------------------------------------
+read uncommmited			v		v		v
+read commited				x		v		v
+repeatable read				x		x		v
+serializable				x		x		x
+
+read commited is default level
+
+
+view	
+virtual table returned by query
+CREATE VIEW [NAME] [COLUMN LIST] AS [SELECT STATEMENT]
+
+names taken from queries if we dont specify
+
+functions
+block of code we can execute
+0 or many parameters, returns 1 value
+invoke functions using ()
+can only query, only dql
+
+stored procedures
+block of code we can execute
+0 or many in or out parameters
+full DML + TCL
+
+CREATE OR REPLACE PROCEDURE [NAME]
+	[PARAM LIST]
+IS
+	[VARIABLE DECLARATIONS]
+BEGIN
+
+END
+
+----------
+
+CURSORS
+
+oracle creates a "context area" with all info necessary for processing SQL statements
+
+a cursor is a pointer to this area (like an iterator)
+
+cursor holds "active set" -> row(s) returned by a statement
+
+oracle will create an implicit cursor if we dont otherwise declare one
+
+explicit cursor - for greater control of access region, programmer-defined
+
+
+
+---------
+
+FEED_BEAR
+W IN-PARAMS - WHICH BEAR, WHICH BEEHIVE, HOW MUCH?
+MUST BE A VALID PAIRING IN BEAR-BEEHIVE TABLE
+
+BEEHIVE'S WEIGHT MUST DECREASE BUT NOT BELOW 0
+THE BEAR'S WEIGHT MUST INCREASE
+
+IF THIS IS IMPOSSIBLE, ROLLBACK
+
+
+
+
+

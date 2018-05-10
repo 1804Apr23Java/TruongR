@@ -1,0 +1,161 @@
+Serialization - converting Java objects (or any data) to bytes for transfer across a network.
+Can serialize anything implementing Serializable interface.
+
+Use ObjectOutputStream / ObjectInputStream
+
+"transient" -> makes a field not sent.
+
+File I/O - interacting with resources stored in files extenal to your java code
+
+java.io <- package
+
+character stream -> human-readable text, FileReader/FileWriter
+byte stream -> machine-readable, FileInputStream/FileOutputStream
+we can use buffering to read/write larger chunks
+
+BufferedReader/BufferedWriter <- char stream
+BufferedInputStream/BufferedOutputStrem <- byte stream
+
+Threads:
+
+Process - Can have many threads, executing program
+Thread - Path of execution within process
+- has own call stack, shares memory with other threads
+
+When we start Java program, 3 threads are created
+1. main (starts with main method)
+2. garbage collector
+3. thread scheduler
+- deamon threads - low priority background thread, don't interact with or control them
+- garbagecollector - release dereferenced objects to free up memory
+
+System.gc(); "gently request" garbage collection, can't force it
+
+.finalize() method (Object)
+to specify behavior to occur at time of garbage collection
+common interview question:
+final - makes a variable immutable, method to be overriden
+finalize - runs at garbage collection
+finally - can put at end of try-catch, always run
+
+
+
+Creating a thread:
+1. extend thread
+
+public class MyThread extends Thread {
+
+	public void run() {
+	\\stuff
+	}
+
+	.start()
+}
+
+2. implement Runnable
+
+public class MyRunnable implements Runnable {
+	public void run() {
+	\\stuff
+	}
+
+}
+
+Thread t = new Thread (new MyRunnable());
+t.start();
+
+Thread - worker
+Runnable - job
+
+The second lets you decouple job from thread
+Can subclass something else
+
+First is useful if you need something of Thread type
+
+Synchronized (thread-safe)
+- apply keyword to entity to require that only one thread at a time can access that resource
+- typically want to do this for writing, not reading
+- gain consistency, lose speed
+
+Thread Methods:
+.start(), .isAlive(), .wait(), .sleep(), notify(), .join(), .notifyAll(), .get/setPriority()
+
+Thread States:
+new
+runnable
+blocked
+waiting
+timedWaiting
+terminated
+                           (.run() finishes) -> terminated
+new -> runnable -> running -> nonrunnable -> runnable
+
+Deadlock - two Threads blocking each other in competition for the same resource
+Starvation - resources being hogged by another thread
+
+executor framework - managing concurrency in Java
+
+producer - consumer program in Java
+
+"basket of stuff"
+
+producer puts things in the basket
+consumer takes things
+
+(Code challenge likely)
+
+Design Patterns
+
+Singleton:
+- ensures that only one instace of a class exists, and provides global point of access
+- lazily loaded, only created when its needed
+- typically has private constructor, property holding the instance of itself (static), public static method to get instance
+
+Factory:
+- abstracting away creation logic for an entity
+- factory will provide an object meeting desired criteria, often implementing a certain interface, w/o exposing the subtype
+
+Java 7 vs Java 8:
+Some new features:
+- lambda functions - anonymous functions passed as arguments, provide method interface using an expression, a lot of fat-arrow notations
+- functional interfaces - interfaces can have default implementation (default keyword)
+- streams: like collections but no storing
+- can operate on all elements of a collection
+- datetime api - some implements
+
+Maven
+Java build tool like ant or gradle
+
+Initially using it to manage dependencies and build products
+
+default build lifecycle: validate, compile, test, package (into jar or war (web archive)), varify, install, deploy
+
+pom - project object model, xml
+how build should and what dependencies are needed
+
+repository:
+remote dependencies hosted online -> reference in pom, maven will download as needed
+
+local: ~/.m2 finder is home all the resources available to you
+
+log4J - logging tool to keep track of what's going on during execution
+better than sysout - won't always have console
+
+can configure logging level
+	Trace, Debug, Info, Warn, Error, Fatal - severity
+
+logging style
+	formatting, layout, date/time style
+
+appender
+- where to log
+- files or the console
+
+
+
+
+
+
+
+
+

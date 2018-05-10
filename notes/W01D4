@@ -1,0 +1,123 @@
+Collection - List, Queue, Set -> SortedSet
+Map -> Sorted Map (not a collection)
+
+Collections framework:
+collection -> group of things
+Collection -> Java framework
+Collections > utility class for working with Collections
+
+List - ordered, duplicates and nulls okay, indexed from zero
+-> ArrayList, Vector, LinkedList (also Queue)
+
+Queue - unordered, FIFO (usually), has head + tail
+-> PriorityQueue
+
+Set - unique elements, unordered
+-> HashSet, LinkedHashSet
+
+Sorted Set -> TreeSet
+
+Map - not a Collection, unordered key-value pairs, keys form a Set (no duplicates)
+-> HashMap, HashTable, TreeMap
+
+Iterable - interface extended by collection, has an iterator
+Map is not iterable, but its keys are
+
+Collections - emptyList, binarySearch, addAll, Sort
+
+TreeMap - uses Red-Black tree to implement, not thread-safe
+- firstEntry, lastEntry
+
+HashMap (not synchronized) - can have nulls
+HashTable (synchronized) - no nulls
+- .equals(), hashCode(), get(K key), put(K key), containsKey(K key), containsValue(V value)
+
+TreeSet - uses red-Black tree, sorts pairs, not threadsafe
+- first(), last()
+
+HashSet - unique, uses hashCode, not synchronized
+
+LinkedHashSet - maintains linked list to maintain order of insertion
+
+PriorityQueue - no nulls, must be comparable, not synchronized, contains, ordered by insertions, pull/remove, contains, clear, add/ofer
+
+LinkedList - dynamic length, add, remove, toArray(), ListIterator(), not synchronized
+
+ArrayList, Vector - async/sync respectively, uses array
+
+interview questions - synchronized? ordered? actually a collection? can you have nulls/duplicates?
+
+
+The Iterator:
+Iterable - interface that, when implemented, allows the implementing class to be the subject of a for-each loop. (for (Object o: thing <- implements implements Iterable))
+Iterator - object which allows for easy traversal of an iterable, and in-place removal of elements
+
+public interface Iterator<E> {
+	boolean hasNext();
+	E next();
+	void remove();
+}
+
+Every type of collection has its own implementation (but dont care b/c of abstraction)
+
+Use instead of for-each if you want to remove elements in place, or traverse multiple collections in parallel.
+
+Ex:
+
+Filter Collection of Person objects
+
+public void filter (Collection <Person> c, String name) {
+	Iterator i = c.iterator();
+	while (i.hasNext()) {
+		if (i.next().getName().equals(name)) {
+			i.remove();
+		}
+	}
+}
+
+
+test-driven development
+How do we test code? 
+Most granular -> most large-scale
+simple function -> unit testing -> component testing -> integration testing -> full-system testing
+
+TDD -> write test before code, typically unit-testing, rapid development lifecycle, related to agile methodology/extreme programming
+
+TDD Cycle - First, figure out requirements for minimum viable product
+
+1. write test design choices about - packages, classes, methods - naming behavior
+2. test fails - written just enough for your test to compile
+red-green refactoring
+3. write code to make it pass
+4. test passes
+5. refactor -> remove duplication, etc.
+
+Pros:
+Clarity for you and others on team
+Stability to stability (Smooth incremental approach)
+Issues with requirements will be known early
+Proactive, not reactive
+
+
+JUnit:
+Open source unit testing framework for Java
+Annotations and assert methods for constructing tests
+Includes support for test runners and test suites
+
+@Test -> Indicates a test method
+
+@Before @After -> Runs foe each test, before or after
+@BeforeClass @AfterClass -> Run One, before or after all tests are complete
+@Ignore -> presents
+
+Assertions: static methods from Org.JUnit.Assert (needs static import)
+assertEquals, assertTrue/False, assertNull/NotNull
+
+
+
+
+
+
+
+
+

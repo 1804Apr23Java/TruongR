@@ -1,0 +1,56 @@
+aggregate - many entries combined
+scalar - value per row
+
+-----
+
+jdbc
+
+DAO - 
+
+Oracle <-> Logic, Console app <-> output
+
+provide interface to application logic which will abstract away data access code
+
+UserDao
+-> getAllUsers();
+-> addUser (User u);
+
+Dao "knows" which data source is required and can provide correct implementation
+
+Often use a factory to recieve correct implementation.
+
+----------
+
+JDBC
+
+Java Database Connectivity
+
+java.sql <- package
+
+SQLException <- checked exception
+
+Important Interfaces:
+
+Connection -> a connection/session with a specific database. Statements are executed and results are returned within this context. Use getMetaData method for infor about connection properties and contents of db.
+
+User Connection methods to set connection properties (Transaction isolations, autocommit, etc.) whenever possible.
+
+----------
+
+Other Interfaces
+
+Statement interface - execute statement as a string and return result set
+- never use this, could cause SQL Injections
+
+PreparedStatement interface - represents a precompiled SQL statement
+
+Use placeholders for changing values (?)
+
+PreparedStatement p = conn.prepareStatement("UPDATE EMPLOYEE SET NAME = ? WHERE ID = ?");
+p.setString(1, "Fred"); //indices start at 1
+p.setInt(2, 52);
+-safer against SQL intjections
+
+CallableStatement (extends PreparedStatement) interface - used to execute a stored procedure
+
+ResultSet - table of data representing the result of a query, maintains a cursor which can be used to loop through table

@@ -1,0 +1,87 @@
+Exceptions & Errors
+
+Things that go wrong at runtime (not syntax errors), actual java objects
+
+Throwable interface -> Error, Exception (Checked Exception), RuntimeException (Unchecked Exception)
+
+Don't write code to handle errors - stack overflow, out of memory, system problems
+Checked Exception - Handled at compile time, a method throwing a checked exception must handle or rethrow, e.g. SqlException, IOException
+Unchecked Exceptions - Not anticipated at compile time, from programmer error often, e.g. NullPointerException, ClassCastException, ArithmeticException
+
+Handling - rethrow with throws keyword, try/catch/finally
+- if not handled, unravels call stack to print exception and terminates
+
+try {
+	//some code
+} catch (Exception e (could be more specific exception type, or just a Throwable)) {
+	//log, print stack trace, etc.
+} finally
+	//code that is always run at the end, whether an exception is thrown or not
+}
+
+multiple catch blocks - specific to general
+
+other points
+- you can throw multiple exceptions in method declaration
+- to compile try/catch/finally, need try + either catch or finally
+- to write an exception, extends exception
+- Throwable - printStackTrace, message
+
+Reflections
+
+- inspect objects and classes at runtime
+- given some object, we can find out its class, fields (including private), methods, constructors
+- we can also instantiate and modify objects
+
+related to instanceof operator
+
+Generics - since java 5 - treating data types as parameter
+allows us to write code that can handle many types of objects and have type safety
+add stability and reusability
+type-checking at compile handling
+
+use placeholders for types <T>, <A,B,C>...
+
+without generics
+	public Object someMethod (Object o) {
+		//does things, return an object
+	}
+
+using this:
+
+Person p = new Person("Fred");
+Person q = (Person) someMethod(p);
+
+you don't know if q is a Person, but compiler will allow this as long as cast happens within same inheritance tree
+could throw ClassCastException()
+
+upcasting - implicit, downcasting - explicit
+Object o = new Person();
+Person p = new Object(); (X does not work, needs cast)
+
+with generics
+
+public <T> T someMethod(T thing) {
+	//do stuff, return something of type T
+}
+
+Person p = new Person ("Fred");
+Person q = someMethod(p); //type safety!
+
+Comparisons
+
+For defining a natural ordering between different objects
+
+Comparable and Comparator - interfaces
+
+Comparable - compareTo is defined by implementing classes
+
+Comparator - must be implemented in a different class to compare two objects of the same type, can create multiple for same type, uses compare() method
+
+Reasons to use Comparator - multiple orderings, want comparison logic separate to class
+
+
+
+
+
+

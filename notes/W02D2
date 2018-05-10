@@ -1,0 +1,196 @@
+SQL:
+
+Structured Query Language
+
+What we use to interact with databases
+
+Different dialects correspond to different DB systems
+
+PostgreSQL, T-SQL, PL/SQL (procedural language SQL, for oracle DB) <- relational databases - primary keys to link tables together
+
+NoSQL -> non-relational database like MongoDB (in json, document pairs)
+
+RDBMS - relational database management system <- Software for interaction w/ DM SqlDeveloper
+
+what is a database? A collection of data stored as related entities (tables), each with a number of entries (rows) made up of fields (columns)
+
+Entity: Bear
+
+ID	BEAR_NAME	BEAR_TYPE 	(Fields)
+5	Thelma		Grizzly		<- One entry
+72	Louise		Polar
+
+Schemas - Skeleton of DB's logical structure
+
+Keys:
+
+Candidate Key - Field or group of fields that can uniquely identify an entry
+Primary Key - A candidate key that must be unique and not null, it can be composite key (several fields), and does not have to be row index
+Foreign Key - Reference to field in another table (usually a primary key), can be null (e.g if entry optional) and can have duplicates
+
+---
+
+BEAR
+ID	BEAR_NAME	BEAR_TYPE	CAVE_ID 	(Fields)
+5	Thelma		Grizzly		27		<- One entry
+72	Louise		Polar
+134	Sophie				27
+256	Paul				2 <- not in CAVE table, violates F.K. constraint
+
+CAVE
+ID	NAME
+3	Tampa
+27	Orlando
+
+CAVE_ID is foreign key
+
+---
+multiplicity relationships:
+
+1-1 		e.g. 	USER <-> Login Table, same table or foreign key
+1-many, many-1	 	STUDENT <-> UNIVERSITY
+			BEAR <-> CAVE
+			Need foreign key
+many-many		STUDENT <-> COURSES
+			deal with by using junction/transition table
+			STUDENT (ID (PK), Name, etc.) <-> STUDENT_COURSE (STUDENT_ID, COURSE_ID (use both as composite key)) <-> COURSE (ID (PK), Name, Subject)
+
+Entity Relational Diagram
+-----
+
+referential integrity
+conistency of relationships between entities
+
+i.e. preventing references to fields that don't exist or entries which don't exist, avoiding orphan entries, etc.
+
+changes in the "one" side are reflected in the "many" side
+
+domain integrity
+ensuring that all entries are of the appropriate type and size
+
+normalization - process of arranging data into tables to reduce redundancy and improve referential integrity.
+
+Normal Forms:
+6 normal forms, but 3rd usually consudered sufficiently normalized
+normal forms != multiplicity relationships
+
+Not normalized:
+
+Modelling number of employees in sales and clients
+
+Employee: ID (PK), Name, Address, Client1, Client2, Client3
+
+Issues:
+Client columns are restricted
+Address has a lot of things in it
+
+1st NF: atomic values, no repeated columns
+
+1NF
+
+Employee: ID (PK), F_Name, L_Name, Street Address, City, ZIP
+Client: ID (PK), F_Name, L_Name, Employee_ID (FK)
+
+2NF: every field should be uniquely related to the primary key, no partial dependencies (fields not fully described by the candidate key) + 1NF
+
+Employee: ID (PK), F_Name, L_Name, Address_ID
+Employee_Client: Employee_ID, Client_ID
+Client: ID (PK), F_Name, L_Name
+Address: Street, City, ZIP, ID
+
+3NF: no transitive dependencies (non-immediate keys defined on each other) + 2NF
+
+Employee: ID (PK), F_Name, L_Name, Address_ID
+Employee_Client: Employee_ID, Client_ID
+Client: ID (PK), F_Name, L_Name
+Address: Street, City, ZID
+ZID: City, Zip
+
+----------
+
+User
+username
+password
+ArrayList<String> log
+
+	one
+	 |
+	multi
+
+Accounts
+AccountID
+Balance
+
+
+----------
+
+sublanguages of sql (remember the keywords/language)
+---
+DML - (Data Manipulation Language) For interacting with data itself.
+	select -> DQL (Data Query Language) -> for retrieving data
+	insert
+	delete
+	update
+DDL - (Data Definition Language) For defining data.
+	tables, schemas, constraints, sequences, etc., etc.
+	create, alter, drop, truncate
+
+create/read/update/delete (CRUD)
+
+TCL - (Transaction Control Language) organizing transactions - units of work done on database
+	commit, savepoint, rollback
+
+DCL - (Data Control Language) For controlling access to data, user permissions
+	grant, revoke
+
+data types for PL/SQL 	- numbers, can specify how many numbers on either side of decimal
+			- characters "varchar"/"varchar2", the latter does nt distinguish between null and ""
+			- booleans, date+time, blob object (large binary object)
+
+----------
+
+SELECT [list of columns] FROM [list of tables] <- required bits
+	WHERE (condition)			<- filter rows
+	GROUP BY [column list]	< return distinct values of specified columns 
+	HAVING [condition] <- often for aggregate functions (MIN, MAX, AVG)
+	ORDER BY [column list]	<- column list
+
+Filters entire data into one result-set.
+
+Instead of [column list] we can do * for all columns.
+
+amazon web services
+rdc creational data service
+
+SQLDeveloper (RDBMS)
+
+peer 1521
+
+Oracle Database Standard Edition Two
+
+defaults
+
+DB instance identifier
+
+needs username/password - write it down.
+
+SID - name chosen
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																							
+instance class - T2 micro, no allocating memory or other stuff that costs money
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

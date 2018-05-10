@@ -1,0 +1,185 @@
+Schedule (for first seven weeks)
+
+Mondays:
+- Dress Business-Professional
+- Quiz
+- Code Challenge
+- 1-1 Interview
+- (If lucky) QC Audits
+
+Tuesdays - Thursdays:
+- Business Casual
+- Content (Board work, Demos, etc.)
+
+Fridays:
+- Smart Casual
+- Content + QC Audit maybe?
+
+Technology:
+
+Database:
+- SQL
+
+Server:
+- Java 8, Hibernate, Spring
+
+Client:
+- P1(HTML, CSS, Javascript), Angular 4
+
+Nontechnical Presentation:
+- Topic of your choice
+- 3 minutes + 2 minutes of questions
+- Tuesday - Friday
+
+Tuesday - Colin, Angela, William, Ian
+Wednesday - JJ, Sivam, Dave, Juis
+Thursday - Kevin, Zach, Danny, Jose
+Friday - Robert, Anil, Tad, Chris, Andres
+
+Version Control with Git
+- Collaboration between developerts
+- Managing changes to code
+- Repository - where code is stored
+
+
+- Master branch - production line, stable code
+- Make a copy - dev branch, every time you update, called a commit
+- Two feature branches - feature A and feature B, when done merge back into dev
+- Finish A, continuing B, need to pull (fetch + merge) from A if it makes changes that affect B
+
+Recommend git for Windows
+
+git add -A (all)
+git push -u - (upstream)
+git checkout -b (branch) "dev"
+git commit -m "message"
+
+Java
+- Very widespread for enterprise applications
+- Well-documented and maintained
+- Made by Oracle (originally Sun)
+- v 1.8 (Java 10 is coming)
+
+JVM - Virtual Machine - interprets compiled code for your computer's processor. "Write once, run anywhere."
+JRE - Runtime Environment - Libraries + JVM
+JDK - Development Kit - Needed to write java
+Compiling - converting source code into byte code (binary data) (.class)
+
+Object-Oriented - basic unit of program is an object (Software bundle of states and behaviors)
+Class - Blueprint describing a type of object, an Object is an instance of a Class
+
+In Java, Classes can include
+instance variables - related to particular object
+static variables - common to all instances of class
+
+class - grizzly bear
+instance var - weight, color
+static var - scientific name
+
+instance method
+static method
+
+Four pillars:
+
+Encapsulation - controlling internal state of an object by requiring all interaction with properties to occur via its methods; private fields, public setters/getters
+Inheritance - sharing states and behaviors between subclasses and superclasses; keyword "extends"
+
+Fruit
+- color
+- numSeeds
+- grow()
+
+child classes - Orange, Banana
+
+Orange
+- numSegments
+
+Banana
+-attractMonkeys()
+
+parentheses after - methods
+
+Object - Parent class of everything
+
+class1 extends Object
+- doThing()
+
+class2 extends Object
+- doThing()
+
+class3 extends Class1, Class2
+- if doThing not implemented, what does it do?
+
+(Cannot happen - diamond of death)
+
+no multiple inheritance
+
+A class may have many subclasses but one direct superclass
+
+Polymorphism - Ability of an object to take on multiple types. Multiple is-a relationships.
+
+Orange is-a Fruit is-a Object
+Typically referring to a subclass as once of its superclasses
+
+Abstraction - Hiding implementation and exposing only necessary functionality (what it does, not how it does it)
+(not always included in the pillars)
+
+Constructors - for instantiating objects
+
+HelloWorld.java
+public class Helloworld {
+
+	public static void main(string [] args) {
+		Orange o = new Orange();
+		Orange o2 = new Orange ("Navel Orange");
+	}
+	main method: entry point to program
+}
+
+
+Fruit.java
+public class Orange {
+	public String variety;
+	public Orange() {
+		super(); (no-args constructor, super calls direct superclass's constructor, get this for free if no constructor written)
+	}
+	public Orange (String variety){
+		this(); (get this for free)
+		this.variety = variety;	
+	}	
+	(private constructors - if called elsewhere)
+}
+
+constructor chaining - why no-arg constructors needed, called upwards up to object
+- Orange() calls every superclass constructor up to Object. Object() executres first
+
+Hawk.java
+
+class Bird {
+	{ sop("b1"); }
+	Bird () { sop("b2"); }
+	static { sop("b3"); }
+}
+
+class Raptor extends Bird {
+	static { sop("r1"); }
+	Raptor () { sop("r2"); }
+	{ sop("r3"); }
+	static { sop("r4"); }
+}
+
+public class Hawk extends Raptor {
+	public static void main (String [] args) {
+	sop("init");
+	new Hawk();
+	sop("hawk");
+
+	}
+}
+
+
+Order - b3 r1 r4 init b1 b2 r3 r2 hawk
+
+IZ0808
+
+Homework - Download Enthoware.

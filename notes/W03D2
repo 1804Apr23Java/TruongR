@@ -1,0 +1,99 @@
+HTTP: hypertext transfer protocol
+TCP: transmission control protocoal
+
+send requests to uri/url - universal resource identifier/locator
+
+include verb or method indicating the type of request
+
+get - for obtaining the resource of that url
+postfor sending a resource to that url
+
+response comes back with data or a re????able view
+
+html - hypertext markup language
+
+standard markup language for structuring web pages
+
+grandparent - xml
+
+elements are represented by tags
+
+<!DOCTYPE html>
+<html>
+  <head> <- meta information
+    <title>HelloWorld</title>
+  </head>
+  <body> <- what actually renders
+    <div>
+      <h1>THIS IS A HEADING</h1> <- headings h1-h6
+    </div>
+	<p>This is text in a paragraph.</p>
+	<a href="some link">This is a link</a>
+	<img src = "cats.jpg" alt="this is cats"/>
+  </body>
+</html>
+
+File paths: 
+Two types:
+  absolute - fine for includeing url to resource, depends on host and location
+  relatives - preferred for local resources relative to the current file
+<img src = "cats.jpg"/> is in same folder
+<img src = "images/cats.jpg"/> is in images folder, which is in current folder
+<img src = "/images/cats.jpg"/> images is in root of current folder
+<img src = "../cats.jpg /> cats is in super folder
+
+CSS - cascading style sheets
+describes how HTML elements will be displayed
+
+Describes how html elements be displayed - color, font, width/height, alignment, etc.
+
+Can standardize accross multiple pages
+
+Three ways to add styling:
+1. inline - use style attribute
+2. internal - use <style></style> element in head
+3. external - including separate css file
+
+1. inline - <h1 style="background-color:blue">Hello</h1>
+2. internal - <head><style>h1 {background-color:blue}</style></head>
+3. external - <head><link rel="stylesheet" href="styles.css" /></head> styles.css like what's in style block in internal
+
+styling "cascades" into a "virtual stylesheet" which takes into account ALL styling applied to a particular element
+Predecence - highest -> lowest (inline, internal or external (have same precedence so applied in literal order on the page), browser default)
+
+h1 { background-color: blue; font-size: 12px }
+^ Selector	^ Declaration
+
+3 Types - 1. element (with that name), 2. class - applies rule to elements of specified class ".myClass", 3. id - applies rule to element with unique id "#myId"
+
+
+<h1 class="myclass" id="someId">Hello</h1>
+		^	^	attributes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

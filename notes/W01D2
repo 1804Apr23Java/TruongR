@@ -1,0 +1,139 @@
+Access Modifiers:
+
+public - accessible everywhere (classes, methods, variables)
+(nothing) - package-level access (default) (classes, methods, variables) - anything within same package can access
+protected - accessible via inheritance (methods and variables only, only can work with inner level classes)
+private - accessible only in the class (methods and variables only, only can work with inner level classes)
+
+- access doesn't cascade
+- child class can be less restrictive
+- if you can't see the class, you can't use its members
+
+packages - grouping of classes, essentially a namespace, declaration goes on first line
+
+import - save typing, declarations go below package, otherwise would have to use fully-qualified name
+
+{
+	package a;
+
+	import b.*;
+	import static c.SomeClass.*; - all static members of SomeClass
+
+	public class foo {
+		//use thing in package b
+	
+	}
+}
+
+Methods:
+
+example method declaration:
+
+public double calculateArea (double num1, double num2) {
+	//do thing
+	return num1*num2;
+}
+
+(access modifier) (return type) (name/identifier) ((parameters)) could include exception list after
+{
+	method body
+}
+
+method signature - name and parameters
+
+overriding - redefine method in subclass with same signature, only works for instance methods
+overloading - write several versions of method with different parameters
+
+identifiers: can begin with letter, underscore, or currency; can contain numbers after
+
+int __$wow37€_5 <- egregious but legal
+
+variable scopes:
+- no global scope
+heap	- static/class scope - accessible by all instances of the class
+	- instance scope - accessible by one particular object (this keyword)
+stack	- method/local scope - within a method, no default values
+	- block scope - within control statements, no default values
+
+variables declared in different scopes shadow each other, narrow scopes take precedence, also occurs between subclasses and superclasses
+
+setter method:
+int var1; (instance scope)
+void setVar1 (int var1 (method scope)) { this.var1 = var1; }
+
+primitive (just values) vs. references (any object of the desired type or its subtypes)
+
+datatypes
+
+lowest level - binary
+
+java types have a "bit depth" - how many bits allocated
+8 bits per byte
+
+when we define a class, we define a reference type
+
+java primitives:
+name			bits		default value	wrapper class (Object representation of primitives) (autoboxing - primitive to wrapper, autounboxing - wrapper to primitive)
+boolean			varies		false		Boolean
+char			16 (Unicode)	null char	Character
+(signed integer)
+(1st bit 0+, 1-)
+byte			8		0 for rest	Byte
+short			16				Short
+int			32				Integer
+long			64				Long
+(signed decimals)
+float			32				Float
+double			64				Double
+
+last six wrapper types inherit number
+narrowing/widening - conversions between numeric primitives
+
+Interfaces vs Abstract Classes
+
+- Interfaces - types of classes which cannot be instantiated, implementing class must implement all defined methods
+- All methods are implicitly abstract and public
+- Java 8: Default implementations
+- variables are implicitly public static final (basically a constant)
+- abstract - applied to a method - must be overriden, applied to class - must be extended, can't be instantiated
+- final - applied to a method - cannot be overriden, applied to a class - cannot be extended, applied to a variable - cannot change value
+  - follow constant naming convention: ONE_TWO_THREE
+
+public interface Edible {
+	public void beEaten();
+}
+
+
+public class Orange extends Fruit implements Edible {
+
+}
+
+
+marker interface - no methods, just a label
+
+instanceof operator - check if it's an interface
+
+can inherit multiple interfaces, no double diamond problem
+
+abstract class - cannot be instantiated, can have concrete methods, use for mostly complete types, can extend only one abstract class
+
+enum -  list of constants, special kind of class
+
+1-2:30
+model the construction of a building in java
+- require 3 classes
+- at least one interface
+- use every access modifier, as well as overriding and overloading
+
+
+
+
+
+
+
+
+
+
+
+
+

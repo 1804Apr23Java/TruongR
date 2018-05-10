@@ -1,0 +1,88 @@
+SID - orcl
+
+-----
+Worksheet
+
+---
+Bear (Bear_ID (PK), Bear_Name, Bear_Type_ID (FK), Bear_Birthdate, Bear_Weight, Cave_ID (FK))
+
+Bear_Type (Bear_Type_ID (PK), Bear_Type_Name)
+
+Cave (Cave_ID (PK), Cave_Name, Max_Bears)
+
+Beehive (Beehive_ID, Beehive_Weight)
+
+Bear_Beehive (Bear_ID, Beehive_ID)
+
+CREATE TABLE BEAR {
+	BEAR_ID INTEGER PRIMARY KEY,
+	BEAR_NAME VARCHAR2(100),
+	BEAR_BIRTHDATE DATE,
+	BEAR_WEIGHT NUMBER(5,2) DEFAULT 200.00,
+	BEAR_TYPE_ID INTEGER NOT NULL,
+	CAVE_ID INTEGER
+}
+
+Joins - allow us to query information from multiple tables
+
+
+Bear - 	ID	Name		Cave_ID
+	3	Ferdinand	2
+	4	Ernest		null
+	5	Francis		2
+	6	George		1
+
+Cave - 	ID	Name
+	1	Tampa
+	2	Orlando
+	3	Reston
+
+Inner Join:
+[ [x] ]
+Bear_ID	Bear_Name	Cave_ID	Cave_Name
+3	Ferdinand	2	Orlando
+5	Francis		2	Orlando
+6	George		1	Tampa
+
+can choose which columns to display in result set
+
+Left Outer Join:
+[x[x] ]
+Bear_ID	Bear_Name	Cave_ID	Cave_Name
+3	Ferdinand	2	Orlando
+4	Ernest		null	null
+5	Francis		2	Orlando
+6	George		1	Tampa
+
+Right Outer Join:
+[ [x]x]
+Bear_ID	Bear_Name	Cave_ID	Cave_Name
+3	Ferdinand	2	Orlando
+null	null		3	Reston
+5	Francis		2	Orlando
+6	George		1	Tampa
+
+Full Outer Join:
+[x[x]x]
+3	Ferdinand	2	Orlando
+4	Ernest		null	null
+null	null		3	Reston
+5	Francis		2	Orlando
+6	George		1	Tampa
+
+--------------------------------------
+
+Views - resuable select statement
+
+"virtual tables" used to save complex entries
+
+Cross Join:
+Cartesian Product of Two Tables
+
+Self Join: Joining table to itself, works well with self-referential tables
+
+Write a select statement to display our bears + caves in the same result set
+
+SELECT BEAR.BEAR_ID, BEAR.NAME, CAVE.CAVE_ID, CAVE.NAME 
+FROM BEAR
+INNER JOIN CAVES ON BEAR.CAVE_ID = CAVE.ID
