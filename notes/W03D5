@@ -1,0 +1,86 @@
+Event Propagation: order in which events on nested elements will be called
+
+<html>
+<head></head>
+
+<body>
+<div id="div1"><div id="div2"><p id="p1">
+sometext
+</p></div></div>
+</body>
+</html>
+
+What typically happens - bubbling
+p1 -> div2 -> div1 -> body -> html
+
+capturing -> root -> target (reverse of bubbling)
+specify with useCapture param
+
+hypertext transfer protocol
+verb/methods
+- get request: generally for retrieving data, send parameters in our url
+	- no data in request body
+	- metadata in header
+- post request: generally for sending data
+	- request body of unlimited size
+	- better for sensitive data
+
+put, delete, trace, options, head
+
+status code
+100-199 infor
+200-299 ok
+300-399 redirect
+400-499 bad request
+500-599 internal server error
+
+AJAX - interact with this system in javascript
+
+asynchronous javascript and xml (also json)
+
+async - can send multiple requests simultaneously without them blocking each other
+
+ajax is not a language, more of a workflow, a set of interactions between the xml, the http requests object + DOM
+
+
+
+XmlHttpRequest
+- From window object 
+- Few older browsers don't support
+
+Method
+abort() -> cancel requests
+
+geAlltResponseHeaders()
+
+open(verb, url, async, username, password)
+how we prepare requests
+send(content)
+
+Properties
+readyState -> status of request
+0 not initalized
+1 server connection established
+2 request recieved
+3 server is processing
+4 respose is reading
+
+
+onReadyStateChange ->
+function defining how to handle requests at various ready states
+
+responseText/responseXml/status/statusText
+
+Workflow:
+- Create xhr object
+- Define onReadyStateChange
+- Prepare request with xhr.open
+- Send it
+
+
+
+
+
+
+
+

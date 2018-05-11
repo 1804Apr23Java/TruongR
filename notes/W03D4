@@ -43,3 +43,98 @@ avoid duplicate keys!
 JSON.parts to convert JSON -> JS object
 
 "documents" - form the basis for many nosql DBs
+
+DOM (document-object-model) structural elements of a page
+
+Tree of Javascript objects used to render the view
+
+every html tag has corresponding os(?) object
+
+DOM Manupulation -> Using JS to cange look & behavior of a page
+
+document object - has representation as all other elements
+
+getElementById
+getElementsByTagName
+getElementsByClassName
+
+can set inner html, attributes, style
+
+can add + remove elements
+
+node tree
+
+<html>
+<head>
+	<title>HelloWorld</title>
+</head>
+<body>
+<p>This is something</p>
+<h2>This is also something</p>
+</body>
+</html>
+
+parent, child, sibling nodes
+
+every node has 1 parent except for root and any number of children
+children of same parent are siblings
+
+html 	- head 		- title		-all these have text nodes
+	- body		- p
+			- h2
+
+navigation:
+parentNode, chideNodes[index], firstChild, lastChild, previousSibling, nextSibling
+
+
+Event Handling
+
+Event: occurence on client side to which we can respond programatically
+
+input events - key presses, on change, on submit
+
+mouse events - in mouse move, on mouse over
+
+click events - onclick, ondoubleclick
+
+Event Object
+
+object representation on most recent fired
+- type, srcElement, clientX/cleintY, whether they keep mouse pressed, etc.
+
+Event Listener
+- three ways - inline
+e.g. <button onclick = "someFunction">button</button>
+obtrusive javascript - tight coupling of behavior + structure
+generally not preferred
+- method - element.onClick = function() {...}
+
+log form [element].addEventListener([type - e.g. click, keypress], handler -> function, can be anonymous, useCapture)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

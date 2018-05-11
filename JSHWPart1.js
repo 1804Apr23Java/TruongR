@@ -8,6 +8,11 @@ var homework = {};
  f(10) = 55
 */
 homework.fibonacci = function(n){
+    /*
+        Precondition: N is a nonnegative integer.
+        Iterate, keeping the current and previous fibonacci values to generate new ones,
+        and return the n-th one.
+    */
     if (!Number.isInteger(n) || n < 0) {
         console.log("Invalid input.");
         return undefined;
@@ -38,6 +43,10 @@ homework.fibonacci = function(n){
 
 
 homework.merge = function(array1, array2) {
+    /*
+    Precondition: array1 and array2 are sorted arrays of numbers
+    Postcondition: returns a sorted array that combines the elements of array1 and array2
+    */
     var mergeArray = [];
     while (array1.length + array2.length > 0) {
         if (array1.length == 0)
@@ -55,6 +64,10 @@ homework.merge = function(array1, array2) {
 };
 
 homework.sort = function(array) {
+    /*
+    Precondition: Array is an array of numbers.
+    Postcondition: Returns the array sorted, via mergesort.
+    */
     if (array.constructor != Array) {
         console.log("Invalid input.");
         return undefined;
@@ -79,6 +92,10 @@ homework.sort = function(array) {
  f(3) = 6
 */
 homework.factorial = function(n){
+    /* 
+    Precondition: n is a nonnegative integer.
+    Postcondition: returns n!, calculated via multiplying into an accumulator.
+    */
     if (!Number.isInteger(n) || n < 0) {
         console.log("Invalid input.");
         return undefined;
@@ -101,6 +118,12 @@ homework.factorial = function(n){
 
 */
 homework.rotateLeft = function(array, n) {
+    /*
+    Precondition: array is an array, number is a nonnegative integer.
+    Postcondition: returns the array with the element in front shifted and
+    pushed to the back n % array.length times. The use of mod is to reduce
+    unnecessary rotations.
+    */
     if (array.constructor != Array || !Number.isInteger(n) || n < 0) {
         console.log("Invalid input.");
         return undefined;
@@ -134,6 +157,13 @@ homework.rotateLeft = function(array, n) {
  Return false if not balanced
 */
 homework.balancedBrackets = function(bracketsString){
+    /*
+    Precondition: bracketsString is a string only consisting of the ([{}]) characters.
+    Postcondition: Returns whether the string has balanced brackets. This is done by
+    pushing left brackets onto a stack, and for right-brackets checking the top of the
+    stack if they match, and popping if they do. We return false when there is a bracket
+    mismatch or if there are elements still in the stack when it's done processing.
+    */
     if (typeof(bracketsString) != 'string') {
         console.log("Invalid input.");
         return undefined;
