@@ -77,6 +77,109 @@ Workflow:
 - Prepare request with xhr.open
 - Send it
 
+----------
+
+gotchas js
+- loose typing/type coercion
+- semicolon injection - adds them when it thinks you're at the end of a line
+function thing() {
+	//stuff
+	return stuff;
+} - puts semicolon here if one isn't here
+- implicit globals
+hoisting - js hoists variable declarations to the top of the scope
+		- watch out for naming clashes
+strict mode, put "use strict" on file, prevents first three issues
+
+error handling
+throw, try, catch statements
+js has errors, not exceptions
+
+referenceerror, typeerror, rangeerror, syntaxerror, evalerror, uriencodeerror
+
+----------
+
+new es6 (ECMAscript) 6
+
+- template literals
+	` indicates formatted string
+- fat-arrow notation
+- blockscope using let keyword
+- class
+- modules for import/export
+- const keyword
+
+----------
+
+Business requirements (user stories/requirements)
+
+SDLC - software development life cycles
+
+bigbang - everything all at once
+"fine" for small project/small team
+no structure
+all decisions made in the moment
+
+waterfall
+
+linear, sequential progression
+like bulding a bridge - requirements don't change
+low overhead
+large project with well-defined end
+
+iterative
+repeating cycle, modular requirement
+like building a village
+loderate overhead - need to make sure existing structure is not broken on new features
+testing can get more complex
+
+agile
+martin fowler - agile manifesto
+iterative implementation
+break requirements to small isolated pieces (user stories)
+product owner to which devs are accountable
+stories move through stages of completion
+
+backlog, in-progress, testing,  code-review, done, released
+
+Two major approaches:
+scrum: short (2-3 weeks) sprints to act on specific user stories
+stories use numeric values  "points"
+begin sprint with planning session + end with retrospective
+daily standout
+
+
+scrum master - project owner, keep everyone on track
+
+kanban: longer-running/larger projects
+stories still move through stages, but not correlated to sprint
+
+"swimwings" features move at different pace
+less direct management, still need super user
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
