@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Bookshelf</title>
+<style>
+    h1 {
+        text-align:center;
+    }
+    table {
+        border-collapse: collapse;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 10px;
+    }
+    table, th, td {
+        border: 2px solid black;
+    }
+    td {
+        padding: 5px;
+    }
+</style>
+
+</head>
+<body>
+
+        <h1>Your Bookshelf</h1>
+
+        <table id="booktable"></table>
+
+
+        <table id="curbooktable"></table>
+
+        <div>
+            <p id = "newAdded">
+            </p>
+        </div>
+
+        <h2>Add a new Book</h2>
+        <form id="bookSubmit">
+                Title:<br>
+                <input type="text" name="title"><br>
+                Author:<br>
+                <input type="text" name="author"><br>
+                Genre:<br>
+                <input type="text" name="genre"><br>
+                Image:<br>
+                <input type="text" name="image"><br>
+                <input type="submit" />
+        </form>
+
+    <script type="text/javascript">
+
+
+    window.onload = function() {
+
+        for (var i = 0; i < window.localStorage.length; i++) {
+            iKey = localStorage.key(i);
+            if (iKey == "dispText") {
+                document.getElementById("newAdded").innerHTML = window.localStorage.getItem(iKey); 
+            } else if (iKey != "curBook") {
+                var book = JSON.parse(window.localStorage.getItem(iKey));
+                var row = document.getElementById("booktable").insertRow(0);
+                var c0 = row.insertCell(0);
+                var c1 = row.insertCell(1);
+                var c2 = row.insertCell(2);
+                var c3 = row.insertCell(3);
+                var c4 = row.insertCell(4);
+                c0.innerHTML = book['title'];
+                c1.innerHTML = '<a viewID="' + iKey + '" href="./index.html">View</a>';
+                c2.innerHTML = book['genre'];
+                c3.innerHTML = book['image'];
+                c4.innerHTML = '<a removeID="' + iKey + '" href="./index.html">Remove</a>';
+            } 
+        }
+
+        var row = document.getElementById("booktable").insertRow(0);
+        var d0 = row.insertCell(0);
+        var d1 = row.insertCell(1);
+        var d2 = row.insertCell(2);
+        var d3 = row.insertCell(3);
+      
+        d0.innerHTML = "Title";
+        d1.innerHTML = "View";
+        d2.innerHTML = "Edit";
+
+        removeList = document.querySelectorAll("a[removeID]");
+        for (var i = 0; i < removeList.length; i++) {
+            rRow = removeList[i];
+            rRow.addEventListener("click", function() {
+                rTitle = rRow.getAttribute("removeID");
+                window.localStorage.removeItem(rTitle);
+                window.localStorage.removeItem("dispText");
+            });
+        }
+
+        viewList = document.querySelectorAll("a[viewID]");
+        for (var i = 0; i < removeList.length; i++) {
+            vRow = viewList[i];
+            vRow.addEventListener("click", function() {
+                window.localStorage.setItem("curBook", this.getAttribute("viewID"));
+            });
+        }
+
+        if(window.localStorage.getItem("curBook")) {
+            var row = document.getElementById("curbooktable").insertRow(0);
+            var d0 = row.insertCell(0);
+            var d1 = row.insertCell(1);
+            var d2 = row.insertCell(2);
+            var d3 = row.insertCell(3);
+        
+            d0.innerHTML = "Title";
+            d1.innerHTML = "Author";
+            d2.innerHTML = "Genre";
+            d3.innerHTML = "Cover Image";
+
+            var curBook = JSON.parse(window.localStorage.getItem(localStorage.getItem("curBook")));
+            var row2 = document.getElementById("curbooktable").insertRow(1);
+            var e0 = row2.insertCell(0);
+            var e1 = row2.insertCell(1);
+            var e2 = row2.insertCell(2);
+            var e3 = row2.insertCell(3);
+
+            e0.innerHTML = curBook["title"];
+            e1.innerHTML = curBook["author"];
+            e2.innerHTML = curBook["genre"];
+            e3.innerHTML = curBook["image"];
+        }
+    };
+
+
+    
+
+    document.getElementById("bookSubmit").addEventListener("submit", function() {
+        var title = document.getElementsByName("title")[0].value;
+        var author = document.getElementsByName("author")[0].value;
+        var genre = document.getElementsByName("genre")[0].value;
+        var image = document.getElementsByName("image")[0].value;
+        var book = {title:title, author:author, genre:genre, image:image};
+        var bookJSON = JSON.stringify(book);
+
+        if (window.localStorage.getItem(title)) {
+            window.localStorage.setItem("dispText", "Error: " + title + " is already in database.");
+        } else {
+            window.localStorage.setItem(title, bookJSON);
+            window.localStorage.setItem("dispText", "Success: " + title + " added.");
+        }
+        window.localStorage.removeItem("curBook");
+    })
+    
+
+    </script>
+</body>
+</html>
+
+
