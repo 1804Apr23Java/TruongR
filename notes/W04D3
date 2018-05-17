@@ -1,0 +1,85 @@
+Session management
+
+
+How to verify and authenticate users
+Want to retain information beyond scope of a single request/response cycle (oftan a browser session)
+series of interactions with a browser is a "session"
+
+several approaches
+- cookies - small pieces of information which are maintained by browser across multiple requests
+persistent cookies - exist for multiple browser sessions, nonpersistent don't
+
+javax.servlet.http.cookie
+
+pros - simple, easy to maintain
+cons - text only, some people disable them, can be used to track
+
+- url rewriting
+append identifier in url
+pro: works when cookies are disabled
+con: needs to be navigating through links, lots of maintenance
+
+hidden form fields:
+
+easy, doesn't rely on browser
+con: can only autenticate user during form submission, shows up in source code, requires maintenance
+
+---
+
+server side managementwith HttpSssion
+programatically interactable session object in java
+
+JSessionID generated - sent to browser as config ot url addition
+
+getSession(boolean)
+
+true - returns new session if none exists
+false - returns existing one or null
+
+.invalidate()
+
+--------------------
+
+clients -> front controller (another servlet) -> servlets
+
+routing requests connecting helper class
+
+front controller pattern
+
+isolates point of entry
+
+--------------------
+
+
+error pages
+
+default response for errors/exceptions
+comes from web container
+
+to override
+
+<error-page>
+	<location>{route}</location>
+	<error-code>404</error-code>
+		OR
+	<exception-type>{Java Exception}</exception-type>
+</error-page>
+
+
+---------------------
+
+node, npm
+1-2 mill software packages
+free + opensource
+pajages are described by package.json - nade+version, dependant pacages
+
+Node.js
+->
+TypeScript
+JS ES6 superset (all JS is TS, not all TS is JS)
+compiled
+.ts
+transpile into es3+
+
+Angular
+Franework that depends on JS

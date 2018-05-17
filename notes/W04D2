@@ -1,0 +1,142 @@
+Web Container (Tomcat) - Has
+- HTML, CSS, JS - static content
+- Servlets - Java classes which can handle HTTP requests
+
+GET				POST
+Request contains:		
+Verb				Verb
+URI				URI
+Header - Encoding, Formatting,	Header
+User Agent
+
+Can be bookmarked
+notfor logins
+params in query string		Request body can be of any size
+response is webpage
+
+Servlet API:
+javax.servlet, javax.http
+
+Servlet
+
+(abstract) GenericServlet implements Servlet
+
+(abstract) HTTPServlet extends GenericServlet -> Has Most of the functionality
+
+YourServlet extends HTTPServlet (written by you) - Just Identify Specifc Behavior
+
+Client <-> Tomcat Server - deployment descriptor, web.xml, describes what is available within container
+								contains mappings between incoming requests and available resources
+
+
+Servlet A, Servlet B
+
+1. client sents http request
+2. Server recieves requests, generates objects
+	ServletRequest, ServletResponse
+3. container uses deployment descriptor to map the request to the appropriate resource
+	Note: Servlets have not been instantiated
+4. Container will instantiate the desired servlet if it does not already exist
+	Uses thread pool - ~200 threads, managed by web container, number of independent requests the container can handle
+	No instance variables in servlets - issues with synchronization
+5. Container calls init() method on that servlet if it does not already exist (set additional params)
+6. Container calls service() method, which invokes the desired request handler method from that servlet
+7. Servlet processes the request, and returns the ServletResponse Object to web container
+8. service() is called to every request for that servlet
+9. The container calls destroy() - maybe it's shutting down, maybe it's releasing memory, the active interval of the servlet expired
+
+init() -> service() -> destroy()
+
+----------------------------------------
+
+Deployment Descriptor
+
+- general config file for web applications
+- located in web-inf folder
+- need to identify servlet and how it will be mapped
+
+<servlet>
+	<servlet-name>bearServlet</servlet-name>
+	<servlet-class>com.revature.[...].BearServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+	<servlet-name>bearServlet</servlet-name>
+	<url-pattern>/bear</url-pattern>
+</servlet-mapping>
+
+---
+
+service method invoked for every request
+two versions - one from GenericServlet, one from HTTPServlet
+public version -> inherited from GenericServlet, called directly by container
+	public void service(ServletRequest req, ServletResponse resp)
+converts these guys to an HTTP Servlet Response
+protected version -> inherited from HTTPServlet, takes HTTPServlet Request
+dispatches req/resp pair to request handlers, based on type of request (get, post, put)
+
+We do not override service methods, just request handlers
+
+---
+
+Request Handlers:
+We -do- override these
+
+doGet/doPost - most common by far
+
+protected void doGet/doPost (HTTPServletRequest req, HTTPServletResponse resp) throws ServletException
+
+give bad request if not defined
+
+dotrae, doRead, doOption -> default implementation for infor gathering
+doPut, doDelete -> default implementation gives bad request
+getLastModified -> tells you when resource last changed
+
+write a servlet to handle requests for homepage, + ant pages that make sense
+
+
+
+-----------
+
+Servlet Config
+Providing configuration for a single servlet
+
+Servlet Context
+Providing configuration for all servlets
+
+Both are set for a servlet when init() method called
+
+-----------
+
+web xml
+<webapp>
+	<context-param> <- available to all servlets (servlet context)
+		<param-name>faveColor</param-name>
+		<param-value>cyan</param-value>
+	</context-param>
+	<servlet> <- available to this servlet
+		<init-param></init-param>
+	</servlet>
+
+-----------
+
+to respond to a request, a servlet may:
+1. send response
+2. forward to another resource
+3. redirect to anothe resource
+
+e.g.
+
+client sends httprequest /a to webContainer
+/a has instructions to forward to /b
+httpresponse still sees /a
+
+RequestDispatcher.forward() method
+
+-----
+redirecting
+
+client sends request for /a
+/a has instructructions to redirect to /b
+/a returns response
+client sends fresh request for /b
+do redirect when you want fresh request/response pair (i.e. passwords - handle as little as possible)

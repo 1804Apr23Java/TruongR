@@ -11,7 +11,8 @@
         border-collapse: collapse;
         margin-left: auto;
         margin-right: auto;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
+        width: 60%
     }
     table, th, td {
         border: 2px solid black;
@@ -65,12 +66,10 @@
                 var c1 = row.insertCell(1);
                 var c2 = row.insertCell(2);
                 var c3 = row.insertCell(3);
-                var c4 = row.insertCell(4);
                 c0.innerHTML = book['title'];
                 c1.innerHTML = '<a viewID="' + iKey + '" href="./index.html">View</a>';
-                c2.innerHTML = book['genre'];
-                c3.innerHTML = book['image'];
-                c4.innerHTML = '<a removeID="' + iKey + '" href="./index.html">Remove</a>';
+                c2.innerHTML = '';
+                c3.innerHTML = '<a removeID="' + iKey + '" href="./index.html">Remove</a>';
             } 
         }
 
@@ -83,6 +82,7 @@
         d0.innerHTML = "Title";
         d1.innerHTML = "View";
         d2.innerHTML = "Edit";
+        d3.innerHTML = "Delete";
 
         removeList = document.querySelectorAll("a[removeID]");
         for (var i = 0; i < removeList.length; i++) {
@@ -91,6 +91,7 @@
                 rTitle = rRow.getAttribute("removeID");
                 window.localStorage.removeItem(rTitle);
                 window.localStorage.removeItem("dispText");
+                window.localStorage.removeItem("curBook");
             });
         }
 
@@ -99,6 +100,7 @@
             vRow = viewList[i];
             vRow.addEventListener("click", function() {
                 window.localStorage.setItem("curBook", this.getAttribute("viewID"));
+                window.localStorage.removeItem("dispText");
             });
         }
 

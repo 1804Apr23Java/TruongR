@@ -1,0 +1,139 @@
+transpiler - source-to-source compiler
+
+typescript transpiler "targets" JS
+
+datatypes
+boolean, numbers (decimal, hex, binary, octal)
+			   0x,  0b,    0o
+
+Strings - double/single quotes
+	- template strings
+		let fullName:String : 'Bob Boberson';
+		let sentence:String = `Hello, my name is $[fullName}`;
+
+arrays 	-> let list: number[] [1, 2, 3];
+	-> let list: Array<number> = [1, 2, 3];
+
+tuples	-> let x: [string, number] = ['hello', 10];
+
+enum	-> let Color {green, red, blue = 5}
+	let c: Color = Color.green
+
+any 	-> let x: any = 4;
+lets x be any type
+
+void	-> abscence of type, for functions that return nothing
+
+null, undefined -> as in JS
+
+never	-> values that should never occur
+
+functions - now they have types
+
+function add(x: number, y: number): number {return x + y;}
+
+let sum = add(3, 4);
+
+can define optional and default parameters now;
+
+optional - need question mark after name - y?: number
+default - y = 5
+
+...y: number[]
+y is a "rest" param (like a vararg)
+
+javascript - dynamic typing
+typescript - introduces static typing
+
+"let" keyword
+-> most importantly used for block scope
+function (input: boolean) number {
+	let a = 100;
+		if (input) {
+		let b = a + 1; 	<- fine to reference a
+		return b;	<- okay
+		}
+	//return b;		<- doesn't work
+	return a;
+}
+
+now we can shadow + re-declare vars, but should we?
+
+"const" keyword - variable cannot be changed once bound
+block-scpied (like let) but value cannot be changed (not immutable)
+
+const numLines: number = 9;
+const cat = {name: 'fred', numLives : numLives}
+cat = {name: 'fred', numLives : numLives} <- not okay
+cat.name = 'Rex' <- okay
+
+in js - use functions + prototyping to do objects
+
+class Creator {
+	greeting: string;
+	constructor (message: String) {
+		this.greeting = message;	
+	}
+	greet() {
+		return this.greeting();	
+	}
+}
+
+inheritance:
+class Animal {}
+class Dog extends Animal{}
+
+
+abstract class Animal {
+abstract makeSound(): void;
+}
+
+Interfaces
+TS typechecking extends on Object "shape"
+
+interface Shape {
+	numSides: number;
+}
+
+Anything with numSides can be a "Shape"
+
+
+access modifiers
+public - implicit (default)
+private - accisble onlin within class
+protected - like privated, but also accesible within instances of deriving class
+
+class {
+	protected name: String;
+	consytructor (name: string) {this.name = name;}
+}
+
+user Employee extends Person {
+	department: string;
+	constructor (name: string, department:string) {
+	super(name);
+	this.department = department;
+}
+}
+
+
+Let emp: Employee = new Employrr("Fred", "Mage");
+
+emp.name <- cannot
+
+non-access modifiers
+
+readonly -> properties, like const except readonly for property of objects
+
+static keyword - like java
+
+webpack
+module bundler
+
+modules - from es6
+have own scipe, but not global scope
+
+"export": make something accessible outside a module;
+"import" include from another module
+
+
