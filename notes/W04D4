@@ -131,9 +131,66 @@ webpack
 module bundler
 
 modules - from es6
-have own scipe, but not global scope
+have own scope, but not global scope
 
 "export": make something accessible outside a module;
 "import" include from another module
+
+generates static respurces from modules + their dependencies
+
+does much, much more
+we'll be using Angular CLI, which uses webpack
+
+----------
+
+angularJS - used to build Single-Page Applications
+
+Runs with node and use webpack to bundle (transpile, minify, aggregate) into static js resources
+use jasmine (unit tests) and protractor (end-to-end tests)
+
+angular cli (from npm)
+- add files, create project, perform testing, bundle, deploy...
+
+
+angular apps are organized into modules
+
+not the same thing as typescript modules
+
+NgModule
+every app has a root module
+generally "AppModule"
+
+decorator @NgModule
+
+decorator - annotation that provides additional functionality
+"meta-programming"
+
+technically experimental for typescript, but still used in angular
+
+Types: classes, methods, properties, @NgModule is just one of them
+
+class declarations, imports + exports, providers, bootstrap (main application view)
+
+components - controls a portion of the screen called a view)
+
+logic: class in .ts file
+view: template in .html file
+
+
+data binding styles
+Unifying data between between component logic and DOM
+Before: all one-way binding, with document.getElementById("blah")
+
+Now we can do it with four methods:
+interpolation		component --> template, done with double curly braces - {{data}}
+property binding	component --> template, [property] = "value"
+event binding		template --> component, (event) = "someFunc()"
+two-way binding		template <-> component,  [()] = ...
+
+
+
+
+
+
 
 

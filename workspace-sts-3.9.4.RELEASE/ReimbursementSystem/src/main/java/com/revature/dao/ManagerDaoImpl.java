@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.revature.domain.Employee;
@@ -48,8 +49,28 @@ public class ManagerDaoImpl implements ManagerDao {
 	}
 	
 	public List<Employee> getAllEmployees() {
-		List<Employee> allEmployees = null;
 		
+		List<Employee> allEmployees = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		ResultSet rs = null;
+
+		try (Connection conn = ConnectionUtil.getConnectionFromFile(filename)) {
+
+			allEmployees = new ArrayList<Employee>();
+			
+			sql = "SELECT * FROM EMPLOYEE";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+
+			while (rs.next())
+				allEmployees.add(new Employee(rs.getInt("EMPLOYEEID"), rs.getString("USERNAME"), rs.getString("PASSWORD")));
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		return allEmployees;
 	}

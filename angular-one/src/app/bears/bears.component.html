@@ -1,0 +1,41 @@
+<p>
+  bears works!
+</p>
+<div class=displayDiv>
+  <span>for simple one-way binding (interpolation)</span>
+  <div>
+    <li>our component value is: 
+      <strong>{{interpolatedBear}}</strong>
+    </li>
+    <li>we can also do expressions: {{5*21}}</li>
+  </div>
+</div>
+
+
+<div class=displayDiv>
+    <span>for property AND binding</span>
+    <div>
+      <li>change attribute of a node based on the change of a property</li>
+      <li>also change and bind to the properties of another component</li>
+      <li>this is also a one-way binding form</li>
+      <div [ngStyle] = "bearStyle" (click) = "changeStyles()">
+        click me to toggle styles
+      </div>
+    </div>
+</div>
+
+
+<div class=displayDiv>
+    <span>for two-way binding</span>
+    <div>
+      <li>alter data from user input or from component logic</li>
+      <div>
+        bear name: <input [(ngModel)] = "bears[1].name"><br><br>
+        bear type: <input [(ngModel)] = "bears[1].type"><br><br>
+      </div>
+      <div>
+        <li>bear name: {{bears[1].name}}</li>
+        <li>bear type: {{bears[1].type}}</li>
+      </div>
+    </div>
+  </div>
