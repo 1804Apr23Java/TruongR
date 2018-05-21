@@ -12,8 +12,10 @@ public interface ManagerDao {
 	public void handleReimbursementRequests(int reimbursementRequestID, boolean isApproved);
 	public void viewAllPendingRequests();
 	public void viewReceipt(int reimbursementRequestID);
-	public void viewAllEmployees();
-	public void viewAllReinbursementRequests(Employee e); */ 
-	public Employee addEmployee(String username, String password);
+	public void viewEmployeeRequests(Employee e); */ 
+	public Employee addEmployee(String username, String password, String firstName, String lastName, String address,
+			String city, String state, String zip, String phone, String email);
+	public Employee getEmployee (String username);
+	public Employee getEmployee (int id);
 	public List<Employee> getAllEmployees();
 }

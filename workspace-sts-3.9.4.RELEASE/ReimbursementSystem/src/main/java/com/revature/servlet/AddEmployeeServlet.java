@@ -37,7 +37,7 @@ public class AddEmployeeServlet extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		
-		md.addEmployee(username, password);
+		md.addEmployee(username, password, "", "", "", "", "", "", "", "");
 		
 		response.sendRedirect("index.html");
 		
