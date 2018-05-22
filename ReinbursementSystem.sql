@@ -26,6 +26,7 @@ DROP TABLE REQUEST;
 CREATE TABLE REQUEST (
     REQUESTID NUMBER NOT NULL,
     EMPLOYEEID NUMBER NOT NULL,
+    AMOUNT NUMBER(38,2) NOT NULL,
     IMAGELINK VARCHAR(2000),
     STATUS NUMBER DEFAULT 0,
     MANAGERID NUMBER,
@@ -150,6 +151,6 @@ INSERT INTO MANAGER (EMPLOYEEID) VALUES (5);
 Insert into Request
 ********************************************************************************/
 
-INSERT INTO REQUEST (EMPLOYEEID, IMAGELINK) VALUES (3, 'www.definitelyavalidhyperlink.com');
+INSERT INTO REQUEST (EMPLOYEEID, AMOUNT, IMAGELINK) VALUES (3, 54.99, 'www.validhyperlink.com/image.png');
 
 COMMIT;

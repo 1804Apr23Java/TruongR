@@ -1,7 +1,7 @@
 package com.revature.domain;
 
 public class Employee {
-	private int id;
+	private int employeeId;
 	private String username;
 	private String password;
 	private String firstName;
@@ -13,10 +13,10 @@ public class Employee {
 	private String phone;
 	private String email;
 	
-	public Employee(int id, String username, String password, String firstName, String lastName, String address,
+	public Employee(int employeeId, String username, String password, String firstName, String lastName, String address,
 			String city, String state, String zip, String phone, String email) {
 		super();
-		this.id = id;
+		this.employeeId = employeeId;
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
@@ -29,12 +29,12 @@ public class Employee {
 		this.email = email;
 	}
 
-	public int getId() {
-		return id;
+	public int getEmployeeId() {
+		return employeeId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setEmployeeId(int employeeId) {
+		this.employeeId = employeeId;
 	}
 
 	public String getUsername() {
@@ -119,7 +119,7 @@ public class Employee {
 
 	@Override
 	public String toString() {
-		return "Employee [id=" + id + ", username=" + username + ", password=" + password + ", firstName=" + firstName
+		return "Employee [employeeId=" + employeeId + ", username=" + username + ", password=" + password + ", firstName=" + firstName
 				+ ", lastName=" + lastName + ", address=" + address + ", city=" + city + ", state=" + state + ", zip="
 				+ zip + ", phone=" + phone + ", email=" + email + "]";
 	}
@@ -132,7 +132,7 @@ public class Employee {
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + id;
+		result = prime * result + employeeId;
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((phone == null) ? 0 : phone.hashCode());
@@ -171,7 +171,7 @@ public class Employee {
 				return false;
 		} else if (!firstName.equals(other.firstName))
 			return false;
-		if (id != other.id)
+		if (employeeId != other.employeeId)
 			return false;
 		if (lastName == null) {
 			if (other.lastName != null)

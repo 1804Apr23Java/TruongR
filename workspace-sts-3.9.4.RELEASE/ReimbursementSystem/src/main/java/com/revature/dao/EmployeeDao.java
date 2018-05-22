@@ -6,10 +6,10 @@ public interface EmployeeDao {
 	public Employee login(String username, String password);
 	public void viewEmployeeHomepage();
 	public void logout();
-	public void submitReimbursmentRequest();
-	public void uploadReceipt(Employee e, int reimbursementRequestID);
-	public void viewPendingReimbursementRequests(Employee e);
-	public void viewResolvedReimbursementRequests(Employee e);
-	public void viewInformation(Employee e);
-	public void updateInformation(Employee e, String field, String updateValue);
+	public void submitRequest(int employeeId, double amount);
+	public void submitRequest(int employeeId, double amount, String imagelink);
+	public void viewPendingRequests(int employeeId);
+	public void viewResolvedRequests(int employeeId);
+	public Employee getEmployee(int employeeId);
+	public void updateEmployee(int employeeId, int field, String updateValue);
 }

@@ -3,15 +3,6 @@
   <display-name>ReimbursementSystem</display-name>
   <servlet>
     <description></description>
-    <servlet-name>AddEmployee</servlet-name>
-    <servlet-class>com.revature.servlet.AddEmployeeServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AddEmployee</servlet-name>
-    <url-pattern>/addEmployee</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
     <servlet-name>GetAllEmployees</servlet-name>
     <servlet-class>com.revature.servlet.GetAllEmployeesServlet</servlet-class>
   </servlet>

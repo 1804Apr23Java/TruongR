@@ -1,0 +1,42 @@
+Hibernate:
+
+distributed by red hat
+object-relational mapping tool (ORM) tool
+establish relationships between persistent objects (DB Table, Etc.) and Java Objects
+
+Using JDBC to abstract away manual mappings
+less boilerplate
+minimize programmability of backend
+
+HQL - hibernate query language
+write queries in terms of java objects, not database tables, use instead of native SQL (use instead whatever dialect your database is written in)
+
+if you change your database implementation, your javacode should not change
+
+What hibernates mostly does is translates between HQL and native SQL
+
+Two strategies with hibernate 
+1. database first - start with existing database, write mappings accordingly
+2. code first - hibernate can generate db entries from specified mappings
+
+Logistics:
+We use Hibernate 4 (org.hibernate)
+
+Hibernate 5 has more support for Java 8
+
+JPA - Java Persistence API
+javax.persistence
+
+Base throwable - HibernateException
+- unchecked exception
+
+Recall: JDBC Interfaces
+Statement
+PreparedStatement
+CallableStatement
+ResultSet
+Connection
+DriverManager (not an interface)
+
+Hibernate Interfaces
+
