@@ -19,7 +19,7 @@ import com.revature.dao.*;
 import com.revature.util.EmployeeField;
 
 
-@FixMethodOrder(MethodSorters.DEFAULT)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class EmployeeDaoTests {
 
 	@Rule
@@ -282,4 +282,23 @@ public class EmployeeDaoTests {
 		ed.updateEmployee(4, EmployeeField.EMAIL, "bob8084@hotmail.com");
 	}
 	
+	@Test
+	public void loginValidEmployee() {
+		assertEquals(ed.getEmployee(1), ed.login("Bob1","pass1"));
+	}
+	
+	@Test
+	public void loginValidManager() {
+		assertEquals(ed.getEmployee(2), ed.login("Bob2","pass2"));
+		
+	}
+	
+	@Test
+	public void loginInvalidUsername() {
+		assertEquals(null, ed.login("Bob196","pass1"));
+	}
+	@Test
+	public void loginInvalidPassword() {
+		assertEquals(null, ed.login("Bob1","pass55"));
+	}
 }

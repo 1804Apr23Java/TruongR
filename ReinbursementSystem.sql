@@ -151,7 +151,6 @@ INSERT INTO MANAGER (EMPLOYEEID) VALUES (5);
 --SELECT * FROM ACCOUNT ORDER BY BANKCLIENTID;
 
 
-
 /********************************************************************************
 Insert into Request
 ********************************************************************************/

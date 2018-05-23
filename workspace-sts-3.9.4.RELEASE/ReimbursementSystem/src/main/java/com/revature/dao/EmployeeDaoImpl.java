@@ -60,6 +60,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		}
 
 		return emp;
+		
+		
 	}
 
 	@Override
@@ -194,6 +196,34 @@ public class EmployeeDaoImpl implements EmployeeDao {
 			pstmt.executeUpdate();
 
 			emp = getEmployee(employeeId);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return emp;
+	}
+	
+	@Override
+	public Employee login(String username, String password) {
+		Employee emp = null;
+
+		PreparedStatement pstmt = null;
+		String sql = null;
+		ResultSet rs = null;
+
+		try (Connection conn = ConnectionUtil.getConnectionFromFile(filename)) {
+
+			sql = "SELECT * FROM EMPLOYEE WHERE USERNAME = ? AND PASSWORD = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, username);
+			pstmt.setString(2, password);
+			rs = pstmt.executeQuery();
+
+			if (rs.next())
+				emp = getEmployee(rs.getInt("EMPLOYEEID"));
 
 		} catch (SQLException e) {
 			e.printStackTrace();

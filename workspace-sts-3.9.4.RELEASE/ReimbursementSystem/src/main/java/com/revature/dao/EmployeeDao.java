@@ -12,4 +12,5 @@ public interface EmployeeDao {
 	public List<Request> getResolvedRequests(int employeeId);
 	public Employee getEmployee(int employeeId);
 	public Employee updateEmployee(int employeeId, EmployeeField field, String updateValue);
+	public Employee login(String username, String password);
 }
