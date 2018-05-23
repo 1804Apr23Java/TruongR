@@ -39,4 +39,123 @@ Connection
 DriverManager (not an interface)
 
 Hibernate Interfaces
+Session - represents interaction with database
+Important operational methods:
+load, get, save, persist, update, merge, delete, saveOrUpdate, createQuery... and many more
 
+Note - not to be confused with HTTPSession
+same concept, different place
+
+SessionFactory - what we use to get sessions
+- singleton -> no conversational state, only need one instance
+
+Configuration - what we use to get SessionFactory (not an interface)
+Specify location of hibernate.cfg.xml which has many things - credentials, locations, dialect, desired hibernate behaviors
+
+--------------------
+
+Interfaces, continued
+
+Transaction - used for representing acid-compliant transactions
+autocommit false by default
+used to wrap code ith crud operations
+have rollback and savepoint for error-handling
+
+Transaction tx = (already existing) Session.beginTransaction();
+do stuff
+tx.commit();
+
+can set isolation levels
+
+Query - access to more complicated operations than session methods
+Can write them in native sql or hql
+
+Full DML - insert, update, delete, etc.
+
+Criteria - structured and programmatic way to write DQL (retrieval only)
+
+How to specify which classes/properties correspond to which tables/columns
+XML or annotations
+
+Hibernate Mapping
+- specifying details of classes and properties as they correspond to database entities.
+
+1. XML
+(more error-prone, and harder to debug)
+
+Ex: Flashcard
+	Id, question, answer
+	int, string, string
+
+hbm (hibernate mapping) file
+flashcard.hbm.xml
+
+<hibernate-mapping>
+	<class name="com.revature.beans.Flashcard" table="FLASHCARD">
+	<id name="id" column="F_ID">
+		<generator class="increment"/>
+	</id>
+	<property name="question column="F_QUESTION" length="200"/>
+	...</class></hibernate-mapping>
+
+Gves info about DB structure
+Increment generator - 	will create sequence and trigger in DB
+must specify where hbm files are in hibernate.cfg.xml
+
+2. Annotations
+alternatively, map out associations in our Flashcard.java class
+
+use JPA annotations by convention
+hibernate has its own suite of annotations too
+
+@Entity
+
+@Table
+
+@Id -> indicates primary key
+
+@Column - can specify multiplicity relationships here
+
+Flashcard.java
+@Entity
+@Table(name="FLASHCARD")
+public class Flashcard implements Serializable {
+	@Id
+	@GenerateValue(strategy=GenerationType.SEQUENCE, generator="FlashcardSequence")
+
+@SequenceGenerator(allocationSize=1, name="FlashcardSequence", SequenceName="SQ_FLASHCARD")
+
+@Column(name="F_ID")
+private int id;
+
+@Column(name="F_QUESTION")
+private String question;
+}
+
+@Column(name="F_ANSWER")
+private String answer;
+
+Multiplicity relations
+
+up until this point - one-many/many-one were pretty much interchangeable
+@OneToOne
+@OneToMany
+@ManyToOne
+@ManyToMany
+
+Unidirectional relationship - only one entity is aware of the relationship
+flashcard.java
+...
+@ManyToOne(fetch=fetchType.LAZY/EAGER)
+@JoinColumn(name="CATEGORY_ID")
+private Category c; -> indicates what other entity is being referenced
+
+If we had a Category object ,no reference to which of our flashcards have that category
+
+2. Bidirectional Mapping
+Both Sides are Aware of relationship
+can obtain details w/o further queries
+
+Category.java...
+@OneToMany(mappedBy="flashcard", fetch=fetchType.LAZY <- careful, avoid infinite loops)
+private List<Flashcard> flashcards;
