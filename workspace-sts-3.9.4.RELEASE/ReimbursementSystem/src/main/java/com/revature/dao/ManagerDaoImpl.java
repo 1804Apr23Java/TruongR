@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.revature.domain.*;
+import com.revature.beans.*;
 import com.revature.util.ConnectionUtil;
 
 public class ManagerDaoImpl implements ManagerDao {

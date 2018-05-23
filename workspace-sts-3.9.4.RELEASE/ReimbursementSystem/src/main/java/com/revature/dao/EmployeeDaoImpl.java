@@ -5,56 +5,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
-import com.revature.domain.Employee;
-import com.revature.domain.Manager;
+import com.revature.beans.Employee;
+import com.revature.beans.Manager;
+import com.revature.beans.Request;
 import com.revature.util.ConnectionUtil;
+import com.revature.util.EmployeeField;
 
 public class EmployeeDaoImpl implements EmployeeDao {
-	
+
 	private String filename = "connection.properties";
-
-	@Override
-	public Employee login(String username, String password) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void viewEmployeeHomepage() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void logout() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void submitRequest(int employeeId, double amount) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void submitRequest(int employeeId, double amount, String imagelink) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void viewPendingRequests(int employeeId) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void viewResolvedRequests(int employeeId) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public Employee getEmployee(int employeeId) {
@@ -98,9 +63,146 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	}
 
 	@Override
-	public void updateEmployee(int employeeId, int field, String updateValue) {
-		// TODO Auto-generated method stub
+	public Request submitRequest(int employeeId, double amount) {
 
+		return submitRequest(employeeId, amount, null);
+	}
+
+	@Override
+	public Request submitRequest(int employeeId, double amount, String imageLink) {
+		Request req = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		ResultSet rs = null;
+
+		Timestamp requestTime = Timestamp.from(Instant.now());
+
+		try (Connection conn = ConnectionUtil.getConnectionFromFile(filename)) {
+
+			sql = "INSERT INTO REQUEST (EMPLOYEEID, AMOUNT, REQUESTTIME, IMAGELINK) VALUES (?,?,?,?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, employeeId);
+			pstmt.setDouble(2, amount);
+			pstmt.setTimestamp(3, requestTime);
+			pstmt.setString(4, imageLink);
+			pstmt.executeUpdate();
+
+			sql = "SELECT * FROM REQUEST WHERE EMPLOYEEID=? AND REQUESTTIME=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, employeeId);
+			pstmt.setTimestamp(2, requestTime);
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				int requestId = rs.getInt("REQUESTID");
+				req = new Request(requestId, employeeId, amount, requestTime, imageLink);
+			}
+
+		} catch (SQLIntegrityConstraintViolationException e) {
+			System.err.println("Attempted to add request from employee " + employeeId + " who doesn't exist.");
+			//e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return req;
+	}
+
+	@Override
+	public List<Request> getPendingRequests(int employeeId) {
+		List<Request> pendingRequests = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		ResultSet rs = null;
+
+		try (Connection conn = ConnectionUtil.getConnectionFromFile(filename)) {
+
+			pendingRequests = new ArrayList<Request>();
+
+			sql = "SELECT * FROM REQUEST WHERE EMPLOYEEID = ? AND STATUS = 0";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, employeeId);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				int requestId = rs.getInt("REQUESTID");
+				double amount = rs.getDouble("AMOUNT");
+				Timestamp requestTime = rs.getTimestamp("REQUESTTIME");
+				String imageLink = rs.getString("IMAGELINK");
+
+				pendingRequests.add(new Request(requestId, employeeId, amount, requestTime, imageLink));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return pendingRequests;
+	}
+
+	@Override
+	public List<Request> getResolvedRequests(int employeeId) {
+		List<Request> resolvedRequests = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		ResultSet rs = null;
+
+		try (Connection conn = ConnectionUtil.getConnectionFromFile(filename)) {
+
+			resolvedRequests = new ArrayList<Request>();
+
+			sql = "SELECT * FROM REQUEST WHERE EMPLOYEEID = ? AND STATUS <> 0";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, employeeId);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				int requestId = rs.getInt("REQUESTID");
+				double amount = rs.getDouble("AMOUNT");
+				Timestamp requestTime = rs.getTimestamp("REQUESTTIME");
+				String imageLink = rs.getString("IMAGELINK");
+				int status = rs.getInt("STATUS");
+				int managerId = rs.getInt("MANAGERID");
+				resolvedRequests
+						.add(new Request(requestId, employeeId, amount, requestTime, imageLink, status, managerId));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return resolvedRequests;
+	}
+
+	@Override
+	public Employee updateEmployee(int employeeId, EmployeeField field, String updateValue) {
+		Employee emp = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+
+		try (Connection conn = ConnectionUtil.getConnectionFromFile(filename)) {
+
+			sql = "UPDATE EMPLOYEE SET " + field.getFieldName() + " = ? WHERE EMPLOYEEID = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, updateValue);
+			pstmt.setInt(2, employeeId);
+			pstmt.executeUpdate();
+
+			emp = getEmployee(employeeId);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return emp;
 	}
 
 }

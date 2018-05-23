@@ -1,15 +1,15 @@
 package com.revature.dao;
 
-import com.revature.domain.*;
+import java.util.List;
+
+import com.revature.beans.*;
+import com.revature.util.EmployeeField;
 
 public interface EmployeeDao {
-	public Employee login(String username, String password);
-	public void viewEmployeeHomepage();
-	public void logout();
-	public void submitRequest(int employeeId, double amount);
-	public void submitRequest(int employeeId, double amount, String imagelink);
-	public void viewPendingRequests(int employeeId);
-	public void viewResolvedRequests(int employeeId);
+	public Request submitRequest(int employeeId, double amount);
+	public Request submitRequest(int employeeId, double amount, String imageLink);
+	public List<Request> getPendingRequests(int employeeId);
+	public List<Request> getResolvedRequests(int employeeId);
 	public Employee getEmployee(int employeeId);
-	public void updateEmployee(int employeeId, int field, String updateValue);
+	public Employee updateEmployee(int employeeId, EmployeeField field, String updateValue);
 }

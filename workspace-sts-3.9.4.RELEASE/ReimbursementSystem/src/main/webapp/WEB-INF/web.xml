@@ -10,4 +10,13 @@
     <servlet-name>GetAllEmployees</servlet-name>
     <url-pattern>/getAllEmployees</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <servlet-name>MasterServlet</servlet-name>
+    <servlet-class>com.revature.servlet.MasterServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>MasterServlet</servlet-name>
+    <url-pattern>/process</url-pattern>
+  </servlet-mapping>
 </web-app>

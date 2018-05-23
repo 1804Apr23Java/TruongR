@@ -1,4 +1,4 @@
-package com.revature.domain;
+package com.revature.beans;
 
 public class Employee {
 	private int employeeId;
