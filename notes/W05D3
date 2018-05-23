@@ -1,0 +1,71 @@
+yesterday - orm concept
+
+implementation - hibernate.cfg.xml - credentials, url, mappings - which classes are being mapped
+mapping strategies - xml or annotations
+xml - need hbm file for every mapped entity
+annotations - jpa 
+
+key interfaces - 
+
+Configuration -> SessionFactory -> Session
+
+Query - write in HQL
+
+Criteria - DQL
+
+Transactions
+
+Today - Object States, Session Methods, Queries and Criteria, Cacheing, TX Management, Inheritance
+
+Contextual Sessions - object in hibernate exist within a persistent context
+the session that we get from SessionFactory is scoped to a particular set of interactions with the the db
+
+Object States - objects in hibernate have a "state" relative to persistence context.
+
+When you creat an object in java, no guarantee that it has a DB representation (a persistent identity)
+
+1. transient - javaside only
+	no representation in persistence context. Java object created with "new" keyword, no valid primary key
+
+2. persistent - has persistent identity, has a primary key value, valid within session even if commit has not occurred
+
+cached by session
+
+automatic dirty checking - at close of session / end of unit of work, hibernate will check whatever persisent objects have been changed and update db accordingly
+
+3. detached - objects that were persistent, but no longer associated with session
+
+can reattach
+
+lazy fetching - load proxy object - placeholder containing pk_id
+
+default strategy for hibernate
+
+eager fetching - get entire object, immediately
+
+data retrieval - get - eageral fetch single object by pk to all related objects
+		- load - lazily fetch single object
+get proxy object with is filled when object is accessed
+
+LazyInitializationException - unchecked
+ObjectNoteFoundException
+
+Data Insertion - save and persist
+save - inserts object immediately and returns generated primary key (int return type), not necessarily immediately persistent (less controlled) allowing hibernate to control when commit occurs
+
+persist - takes transient object, immediately makes it persistemt
+void return type, executes as part of a declared transaction
+
+Data Modification
+update - bring representations of object in db into persistent state
+if there is already a persistent entity with same id in the session, a NonUniqueObjectException may be thrown
+
+Good for objects that are transient (or detached), where you dont want to retrieve them, just want to update the db
+
+merge - will not throw NonUniqueObjectException
+-  check whether a persistent object with given id exists, if none does, brings existing representation into context. Then copies values of provided object onto persistent object.
+rely on automatic dirty checking to save changes.
+
+saveOrUpdate - brings privided object into persistent state whether it is transient, persistent, or detached
+
+
