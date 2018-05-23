@@ -64,7 +64,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 	@Override
 	public Request submitRequest(int employeeId, double amount) {
-
 		return submitRequest(employeeId, amount, null);
 	}
 
@@ -100,7 +99,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 		} catch (SQLIntegrityConstraintViolationException e) {
 			System.err.println("Attempted to add request from employee " + employeeId + " who doesn't exist.");
-			//e.printStackTrace();
+			// e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -121,7 +120,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 			pendingRequests = new ArrayList<Request>();
 
-			sql = "SELECT * FROM REQUEST WHERE EMPLOYEEID = ? AND STATUS = 0";
+			sql = "SELECT * FROM REQUEST WHERE EMPLOYEEID = ? AND STATUS = 0 ORDER BY REQUESTID ASC";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, employeeId);
 			rs = pstmt.executeQuery();
@@ -155,7 +154,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 			resolvedRequests = new ArrayList<Request>();
 
-			sql = "SELECT * FROM REQUEST WHERE EMPLOYEEID = ? AND STATUS <> 0";
+			sql = "SELECT * FROM REQUEST WHERE EMPLOYEEID = ? AND STATUS <> 0 ORDER BY REQUESTID ASC";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, employeeId);
 			rs = pstmt.executeQuery();

@@ -1,6 +1,5 @@
 package com.revature.testing;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 import java.sql.Timestamp;
@@ -56,7 +55,7 @@ public class EmployeeDaoTests {
 	}
 
 	@Test
-	public void getPendingRequestsWorksForEmployeeWithPendingRequests() {
+	public void getPendingRequestsHandlesEmployeeWithPendingRequests() {
 		
 		Timestamp t1 = Timestamp.valueOf(LocalDateTime.of(2000, 1, 1, 1, 1));
 		Timestamp t2 = Timestamp.valueOf(LocalDateTime.of(2000, 2, 2, 2, 2));
@@ -74,13 +73,13 @@ public class EmployeeDaoTests {
 	}
 
 	@Test
-	public void getPendingRequestsWorksForEmployeeWithNoPendingRequests() {
+	public void getPendingRequestsHandlesEmployeeWithNoPendingRequests() {
 		List<Request> pendingRequests = ed.getPendingRequests(2);
 		assertEquals(0, pendingRequests.size());
 	}
 
 	@Test
-	public void getResolvedRequestsWorksForEmployeeWithResolvedRequests() {
+	public void getResolvedRequestsHandlesEmployeeWithResolvedRequests() {
 
 		Timestamp t4 = Timestamp.valueOf(LocalDateTime.of(2000, 4, 4, 4, 4));
 		Timestamp t5 = Timestamp.valueOf(LocalDateTime.of(2000, 5, 5, 5, 5));
@@ -102,32 +101,32 @@ public class EmployeeDaoTests {
 	}
 
 	@Test
-	public void getResolvedRequestsWorksForEmployeeWithNoResolvedRequests() {
+	public void getResolvedRequestsHandlesEmployeeWithNoResolvedRequests() {
 		List<Request> resolvedRequests = ed.getResolvedRequests(3);
 		assertEquals(0, resolvedRequests.size());
 	}
 
 	@Test
-	public void getEmployeeWorksForValidEmployee() {
+	public void getEmployeeHandlesValidEmployee() {
 		Employee bob1 = new Employee(1, "Bob1", "pass1", "Bob", "Oneson", "1111 Bob Street", "Bobsville", "AZ", "80801",
 				"808-808-8081", "bob8081@hotmail.com");
 		assertEquals(bob1, ed.getEmployee(1));
 	}
 
 	@Test
-	public void getEmployeeWorksForValidManager() {
+	public void getEmployeeHandlesValidManager() {
 		Manager bob2 = new Manager(2, "Bob2", "pass2", "Tbob", "Twoson", "222 Bob Street", "Bobscity", "CO", "80802",
 				"808-808-8082", "bob8082@hotmail.com", 1);
 		assertEquals(bob2, ed.getEmployee(2));
 	}
 	
 	@Test
-	public void getEmployeeWorksForInvalidEmployee() {
+	public void getEmployeeHandlesInvalidEmployee() {
 		assertEquals(null, ed.getEmployee(1000));
 	}
 	
 	@Test
-	public void submitRequestWorksForValidEmployee() {
+	public void submitRequestHandlesValidEmployee() {
 		Request req = ed.submitRequest(1, 40, "defvalid.com/imagehyper.png");
 		Timestamp requestTime = req.getRequestTime();
 		
@@ -145,13 +144,13 @@ public class EmployeeDaoTests {
 	}
 	
 	@Test
-	public void submitRequestWorksForInvalidEmployee() {
+	public void submitRequestHandlesInvalidEmployee() {
 		Request req = ed.submitRequest(100, 40, "defvalid.com/imagehyper.png");
 		assertEquals(null, req);
 	}
 	
 	@Test
-	public void submitRequestWorksForValidEmployeeNoImage() {
+	public void submitRequestHandlesValidEmployeeNoImage() {
 		Request req = ed.submitRequest(6, 94.99);
 		Timestamp requestTime = req.getRequestTime();
 		
@@ -170,7 +169,7 @@ public class EmployeeDaoTests {
 	}
 
 	@Test
-	public void submitRequestWorksForInvalidEmployeeNoImage() {
+	public void submitRequestHandlesInvalidEmployeeNoImage() {
 		Request req = ed.submitRequest(106, 94.99);
 		assertEquals(null, req);
 	}
