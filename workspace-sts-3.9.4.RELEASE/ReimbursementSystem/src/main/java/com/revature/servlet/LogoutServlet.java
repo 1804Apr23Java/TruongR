@@ -30,10 +30,7 @@ public class LogoutServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html");
-		System.out.print("IN LOGOUT DOGET");
 		HttpSession session = request.getSession(false);
-		
-		System.out.println("Session = " + session);
 		
 		if (session != null) {
 			session.invalidate();

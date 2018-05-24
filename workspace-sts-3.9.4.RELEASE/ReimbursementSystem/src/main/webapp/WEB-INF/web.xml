@@ -147,4 +147,24 @@
     <servlet-name>GetEmployeeHistoryServlet</servlet-name>
     <url-pattern>/getEmployeeHistory</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>GetAllResolvedRequestsServlet</display-name>
+    <servlet-name>GetAllResolvedRequestsServlet</servlet-name>
+    <servlet-class>com.revature.servlet.GetAllResolvedRequestsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GetAllResolvedRequestsServlet</servlet-name>
+    <url-pattern>/getAllResolvedRequests</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ServeManagerWebpageServlet</display-name>
+    <servlet-name>ServeManagerWebpageServlet</servlet-name>
+    <servlet-class>com.revature.servlet.ServeManagerWebpageServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServeManagerWebpageServlet</servlet-name>
+    <url-pattern>/serveManagerWebpage</url-pattern>
+  </servlet-mapping>
 </web-app>

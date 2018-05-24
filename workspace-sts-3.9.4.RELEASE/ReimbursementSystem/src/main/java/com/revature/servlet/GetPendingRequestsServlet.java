@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.beans.Request;
@@ -33,8 +34,14 @@ public class GetPendingRequestsServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+
+		HttpSession session = request.getSession(false);
+		
+		if (session == null || session.getAttribute("employeeId") == null)
+			response.sendRedirect("login.html");
+		
 		EmployeeDao ed = new EmployeeDaoImpl();
-		int employeeId = (Integer) request.getSession().getAttribute("employeeId");
+		int employeeId = (Integer) session.getAttribute("employeeId");
 		response.setContentType("text/plain");
 		PrintWriter wd = response.getWriter();
 		List <Request> pendingRequests = ed.getPendingRequests(employeeId);

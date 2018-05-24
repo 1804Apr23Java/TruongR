@@ -1,29 +1,22 @@
 package com.revature.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.beans.Employee;
-import com.revature.dao.EmployeeDao;
-import com.revature.dao.EmployeeDaoImpl;
-
 /**
- * Servlet implementation class RetrieveProfileServlet
+ * Servlet implementation class ServeManagerWebpageServlet
  */
-public class RetrieveProfileServlet extends HttpServlet {
+public class ServeManagerWebpageServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public RetrieveProfileServlet() {
+	public ServeManagerWebpageServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -34,19 +27,18 @@ public class RetrieveProfileServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		HttpSession session = request.getSession(false);
-		
-		if (session == null || session.getAttribute("employeeId") == null)
+
+		if (session == null || session.getAttribute("managerId") == null)
 			response.sendRedirect("login.html");
 
-		EmployeeDao ed = new EmployeeDaoImpl();
-		int employeeId = (Integer) request.getSession().getAttribute("employeeId");
+
 		response.setContentType("text/plain");
-		PrintWriter wd = response.getWriter();
-		Employee emp = ed.getEmployee(employeeId);
-		ObjectMapper om = new ObjectMapper();
-		wd.println(om.writeValueAsString(emp));
+		
+		String username = (String) request.getSession().getAttribute("username");
+		response.getWriter().println("./m/" + username + ".html");
+
 	}
 
 	/**
@@ -55,6 +47,7 @@ public class RetrieveProfileServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

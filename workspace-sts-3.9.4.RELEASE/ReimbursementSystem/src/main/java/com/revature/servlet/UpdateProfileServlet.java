@@ -7,6 +7,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.revature.beans.Employee;
 import com.revature.dao.EmployeeDao;
@@ -44,18 +45,17 @@ public class UpdateProfileServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// need to ensure that employeeId is in cookies
-		Cookie[] cookies = request.getCookies();
-		int employeeId = -1;
-		for (Cookie c : cookies) {
-			if (c.getName().equals("employeeId"))
-				employeeId = Integer.parseInt(c.getValue());
-		}
+		HttpSession session = request.getSession(false);
+		
+		if (session == null || session.getAttribute("employeeId") == null)
+			response.sendRedirect("login.html");
+		
+		int employeeId = (Integer) session.getAttribute("employeeId");
+		
 		EmployeeField field = EmployeeField.valueOf(request.getParameter("field"));
 		String updateValue = request.getParameter("updateValue");
 
 		EmployeeDao ed = new EmployeeDaoImpl();
-
-		//System.out.println("ATTEMPTING TO UPDATE WITH " + employeeId + " AND " + field + " AND " + updateValue);
 
 		Employee emp = ed.updateEmployee(employeeId, field, updateValue);
 		

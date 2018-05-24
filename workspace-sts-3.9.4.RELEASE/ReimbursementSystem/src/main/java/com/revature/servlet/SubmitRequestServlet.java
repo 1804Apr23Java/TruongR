@@ -49,7 +49,11 @@ public class SubmitRequestServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		HttpSession session = request.getSession();
+		HttpSession session = request.getSession(false);
+		
+		if (session == null || session.getAttribute("employeeId") == null)
+			response.sendRedirect("login.html");
+		
 		double amount = Double.parseDouble(request.getParameter("amount"));
 		int employeeId = (Integer) request.getSession().getAttribute("employeeId");
 		EmployeeDao ed = new EmployeeDaoImpl();
