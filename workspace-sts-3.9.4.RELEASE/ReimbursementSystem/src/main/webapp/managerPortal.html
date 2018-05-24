@@ -71,30 +71,6 @@ body {
 		src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
 	<script>
-		// from http://andreaazzola.com/post-data-js/, maybe rewrite later
-		function post(dictionary, url, method) {
-			method = method || "post"; // post (set to default) or get
-
-			// Create the form object
-			var form = document.createElement("form");
-			form.setAttribute("method", method);
-			form.setAttribute("action", url);
-
-			// For each key-value pair
-			for ( var key in dictionary) {
-				//alert('key: ' + key + ', value:' + dictionary[key]); // debug
-				var hiddenField = document.createElement("input");
-				hiddenField.setAttribute("type", "hidden");
-				hiddenField.setAttribute("name", key);
-				hiddenField.setAttribute("value", dictionary[key]);
-				// append the newly created control to the form
-				form.appendChild(hiddenField);
-			}
-
-			document.body.appendChild(form); // inject the form object into the body section
-			form.submit();
-		}
-
 		var populateEmployeeHistory = function(xhr) {
 			var resp = JSON.parse(xhr.response);
 			var tablespace = document.getElementById("tablespace");
