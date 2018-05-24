@@ -36,7 +36,7 @@ public class LoginServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		
 
-		System.out.println("IN LOGIN DOGET");
+		//System.out.println("IN LOGIN DOGET");
 		
 		request.getRequestDispatcher("login.html").forward(request, response);
 	}
@@ -48,7 +48,7 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-		System.out.println("IN LOGIN DOPOST");
+		//System.out.println("IN LOGIN DOPOST");
 		
 		EmployeeDao ed = new EmployeeDaoImpl();
 
