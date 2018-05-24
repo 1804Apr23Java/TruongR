@@ -63,13 +63,11 @@ public class LoginServlet extends HttpServlet {
 		if (emp != null) {
 			System.out.println("emp valid");
 			HttpSession session = request.getSession();
-			response.addCookie(new Cookie("employeeId", String.valueOf(emp.getEmployeeId())));
 			if (emp instanceof Manager) {
-				response.addCookie(new Cookie("managerId", String.valueOf(((Manager) emp).getManagerId())));	
+				session.setAttribute("managerId", ((Manager) emp).getManagerId());	
 			}
 			session.setAttribute("username", emp.getUsername());
 			session.setAttribute("employeeId", emp.getEmployeeId());
-			session.setAttribute("employeeObject", emp);
 			response.sendRedirect("portal.html");
 		} else {
 			response.sendRedirect("login.html");

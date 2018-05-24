@@ -59,10 +59,6 @@ public class UpdateProfileServlet extends HttpServlet {
 		//System.out.println("ATTEMPTING TO UPDATE WITH " + employeeId + " AND " + field + " AND " + updateValue);
 
 		Employee emp = ed.updateEmployee(employeeId, field, updateValue);
-
-		if (emp != null) {
-			response.addCookie(new Cookie("portalMessage", field.getFieldName() + "Updated."));
-		}
 		
 		response.sendRedirect("portal.html");
 

@@ -1,6 +1,7 @@
 package com.revature.main;
 
 import java.io.File;
+import java.time.Instant;
 
 import com.revature.util.EmployeeField;
 
@@ -16,21 +17,19 @@ public class TestingDriver {
 
 	public static void main(String[] args) {
 
-		
-		 EmployeeDao ed = new EmployeeDaoImpl();
-		 
-		 //ed.submitRequest(1000, 40);
+		EmployeeDao ed = new EmployeeDaoImpl();
 
-		/*
-		 * 
-		 * final AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient(); List<Bucket>
-		 * buckets = s3.listBuckets();
-		 * 
-		 * try { s3.putObject("rtruong2-receipts", "deg.jpg", new
-		 * File("/home/robert/Desktop/degree.JPG")); } catch (AmazonServiceException e)
-		 * { System.err.println(e.getErrorMessage()); System.exit(1); }
-		 * System.out.println("Done!");
-		 */
+		// ed.submitRequest(1000, 40);
+
+		final AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient();
+
+		try {
+			s3.putObject("rtruong2-demo", "notes-" + Instant.now().getEpochSecond() + ".txt", new File("/home/robert/Desktop/classNotes.txt"));
+		} catch (AmazonServiceException e) {
+			System.err.println("did not upload");
+			System.exit(1);
+		}
+		System.out.println("Done!");
 
 		EmployeeField field = EmployeeField.FIRSTNAME;
 		System.out.println(field.getFieldName());
