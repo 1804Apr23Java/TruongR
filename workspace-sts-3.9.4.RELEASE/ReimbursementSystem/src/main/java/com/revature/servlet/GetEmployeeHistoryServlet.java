@@ -33,6 +33,7 @@ public class GetEmployeeHistoryServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
 		int employeeId = Integer.parseInt(request.getParameter("employeeId"));
 		ManagerDao md = new ManagerDaoImpl();
 		response.setContentType("text/plain");

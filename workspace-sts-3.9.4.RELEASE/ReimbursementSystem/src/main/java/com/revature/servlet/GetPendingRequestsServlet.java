@@ -10,12 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revature.beans.Employee;
 import com.revature.beans.Request;
 import com.revature.dao.EmployeeDao;
 import com.revature.dao.EmployeeDaoImpl;
-import com.revature.dao.ManagerDao;
-import com.revature.dao.ManagerDaoImpl;
 
 /**
  * Servlet implementation class GetPendingRequestsServlet

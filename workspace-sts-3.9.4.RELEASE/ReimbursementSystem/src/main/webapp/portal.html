@@ -250,16 +250,7 @@ body {
 		document.getElementById("viewProfile").addEventListener("click",
 				function() {
 					sendAjaxGet("viewProfile", populateProfile);
-				});
-
-/*
-		window.addEventListener("load", function() {
-			if (Cookies.get("portalMessage")) {
-				document.getElementById("mContent").innerHTML = "Message: " + Cookies
-						.get("portalMessage");
-			}
-		})
-*/		
+				});		
 
 		document.getElementById("viewWebsite").addEventListener("click", function() {
 			sendAjaxGet("serveWebpage", function(xhr) {

@@ -1,7 +1,6 @@
 package com.revature.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.Instant;
 
 import javax.servlet.ServletException;

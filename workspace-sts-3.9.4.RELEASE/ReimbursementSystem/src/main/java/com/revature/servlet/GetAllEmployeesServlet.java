@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.beans.Employee;
-import com.revature.dao.*;
+import com.revature.dao.ManagerDao;
+import com.revature.dao.ManagerDaoImpl;
 
 /**
  * Servlet implementation class GetAllEmployeesServlet
