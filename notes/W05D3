@@ -68,4 +68,88 @@ rely on automatic dirty checking to save changes.
 
 saveOrUpdate - brings privided object into persistent state whether it is transient, persistent, or detached
 
+Caching - storing results in runtime memory
 
+Can provide speed improvements if running query multiple times
+
+Level 1: (Query Caching, disabled by default)
+Within scope of session, not shared between threads
+Associated with session object
+Happens by default
+
+evict - remove one object
+clear - remove all object
+contains - check if object is present in cache
+
+if doing a lot of work, may want to periodically clear cache to avoid memory running out - has a size limit
+possibility of stale data - watch out
+
+Level 2: ()
+Scoped to SessionFactory
+allows you to keep cache between sessions
+some config -> need a 3rd party like ehcache or apache ignite
+readonly if not expecting info to change between sessions
+read-write if want to check for updates (good if cached objects include persistent objects from sessions)
+
+hibernate.cache.use-second-level-cache - false property by default
+
+-----
+
+transaction management
+
+transaction - a unit of work on our database
+
+Atomicity - all or nothing
+Consistency - DB is in valid state before or after transaction
+Isolation - concurrent transaction behave as if they were sequential
+Durability - all commits are final
+
+		|Dirty Read	Nonrepeatable Read	Phantom Read
+________________|________________________________________________________
+read-uncommited	|v		v			v
+read-commited	|x		v			v
+repeatable read	|x		x			v
+serializable	|x		x			x
+
+
+----
+inheritance
+
+Animal - id, name, cave
+Bat extends Animal - wingspan
+
+Bear extends Animal
+BEAR_TYPE
+
+table-per-hierarchy one table for entire hierarchy <- good if subclasses are similar
+id	name	cave	wingspan	BEAR_TYPE	Type	<- discriminator call, which thing in hierarchy is being dealt with
+3	Bob	3	null		2		1 (Bear)
+17	Joe	3	30		null		2 (Bat)
+52	Fred	5	null		null		0 (Animal)
+
+table-per-subclass <- good if subclasses are different, and if you want to treat bat/bear as animals
+Animal
+
+A_ID	name	cave
+3	Bob	3
+17	Joe	3
+52	Fred	5
+
+Bat
+A_ID	wingspan
+17	30
+
+Bear
+A_ID	beartype
+3	2
+
+table-per-concrete-class - like subclass but with animal fields
+Animal 	- ID, Name, Cave
+Bat	- Id, Name, Cave, Wingspan
+Bear	- ID, Name, Cave, Beartype
+
+hibernate maintains active connections - default size = 20
+
+JNDI - java naming and directory interface
+allows distributed applications to access services independently
+configure a datasource on a tomcat server!

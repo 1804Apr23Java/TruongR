@@ -1,12 +1,17 @@
 package com.revature.servlet;
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.revature.beans.Employee;
+import com.revature.beans.Manager;
 import com.revature.dao.EmployeeDao;
 import com.revature.dao.EmployeeDaoImpl;
 
@@ -31,6 +36,10 @@ public class LoginServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
+
+		System.out.println("IN LOGIN DOGET");
+		
 		request.getRequestDispatcher("login.html").forward(request, response);
 	}
 
@@ -40,7 +49,9 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		HttpSession session = request.getSession();
+		
+		System.out.println("IN LOGIN DOPOST");
+		
 		EmployeeDao ed = new EmployeeDaoImpl();
 
 		response.setContentType("text/html");
@@ -48,11 +59,20 @@ public class LoginServlet extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		// authenticate user
-		if (ed.login(username, password) != null) {
-			session.setAttribute("username", username);
+		Employee emp = ed.login(username, password); 
+		if (emp != null) {
+			System.out.println("emp valid");
+			HttpSession session = request.getSession();
+			response.addCookie(new Cookie("employeeId", String.valueOf(emp.getEmployeeId())));
+			if (emp instanceof Manager) {
+				response.addCookie(new Cookie("managerId", String.valueOf(((Manager) emp).getManagerId())));	
+			}
+			session.setAttribute("username", emp.getUsername());
+			session.setAttribute("employeeId", emp.getEmployeeId());
+			session.setAttribute("employeeObject", emp);
 			response.sendRedirect("portal.html");
 		} else {
-			response.sendRedirect("login");
+			response.sendRedirect("login.html");
 		}
 	}
 

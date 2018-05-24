@@ -1,6 +1,7 @@
 package com.revature.servlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -47,12 +48,17 @@ public class UploadImageServlet extends HttpServlet {
 
 		try {
 			Part filePart = request.getPart("fileToUpload");
-			response.getWriter().println(filePart.getSubmittedFileName());
+			PrintWriter pw = response.getWriter();
+			
+			pw.println("<!DOCTYPE html><html><head></head><body>");
+			pw.println(filePart.getSubmittedFileName());
 
 			final AmazonS3 s3 = AmazonS3ClientBuilder.defaultClient();
 
 			s3.putObject("rtruong2-receipts", filePart.getSubmittedFileName(), filePart.getInputStream(),
 					new ObjectMetadata());
+			pw.println("<img src=\"" + " https://s3.amazonaws.com/rtruong2-receipts/" + filePart.getSubmittedFileName()
+					+ "\" width=\"50%\"></body>");
 
 		} catch (IllegalStateException e) {
 			response.getWriter().println("ERROR: Image size too large");

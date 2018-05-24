@@ -35,26 +35,14 @@ public class GetAllEmployeesServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
+		
+		
 		ManagerDao md = new ManagerDaoImpl();
 		response.setContentType("text/plain");
 		PrintWriter wd = response.getWriter();
 		List <Employee> employeeList = md.getAllEmployees();
 		ObjectMapper om = new ObjectMapper();
-		wd.println(om.writeValueAsString(employeeList));
-		
-		/*wd.println("<!DOCTYPE html>");
-		wd.println("<html>");
-		wd.println("<head>");
-		wd.println("<title>Employees</title>");
-		wd.println("<style>table, th, td {border: 2px solid black; border-collapse: collapse} table {width: 50%; margin-left: auto; margin-right:auto}</style>");
-		wd.println("</head><body>"); 
-		wd.println(om.writeValueAsString(EmployeeList));
-		wd.println("<table>");
-		wd.println("<tr><th>ID</th><th>Employee Name</th><th>Passwords</th></tr>");
-		for (Employee e: EmployeeList)
-			wd.println("<tr><td>" + e.getId() + "</td><td>" + e.getUsername() + "</td><td>" + e.getPassword() +  "</td></tr>");
-		wd.println("</table></body></html>"); */
-		
+		wd.println(om.writeValueAsString(employeeList));		
 		
 	}
 
