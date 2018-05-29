@@ -58,7 +58,7 @@ Interfaces, continued
 
 Transaction - used for representing acid-compliant transactions
 autocommit false by default
-used to wrap code ith crud operations
+used to wrap code with crud operations
 have rollback and savepoint for error-handling
 
 Transaction tx = (already existing) Session.beginTransaction();

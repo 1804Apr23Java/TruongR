@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	    crossorigin="anonymous">
+	<meta charset="UTF-8">
+	<title>Manager Portal</title>
+
+	<style>
+		html,
+		body {
+			height: 100%;
+		}
+
+		body {
+			display: -ms-flexbox;
+			display: -webkit-box;
+			display: flex;
+			-ms-flex-align: center;
+			-ms-flex-pack: center;
+			-webkit-box-align: center;
+			align-items: center;
+			-webkit-box-pack: center;
+			justify-content: center;
+			padding-top: 40px;
+			padding-bottom: 40px;
+			background-color: #f5f5f5;
+		}
+
+		.btn-group-vertical.center,
+		#tablespace,
+		#messagespace {
+			display: block;
+			margin: 0 auto;
+			text-align: center;
+		}
+	</style>
+</head>
+
+
+<body class="text-center">
+
+	<div class="container-fluid">
+		<div class="btn-group-vertical btn-group row col-md-8 col-md-offset-2">
+			<button type="button" class="btn btn-secondary btn-block" id="viewManagerWebsite">View Manager Website</button>
+			<button type="button" class="btn btn-secondary btn-block" id="viewAllPendingRequests">View All Pending Requests</button>
+			<button type="button" class="btn btn-secondary btn-block" id="viewAllResolvedRequests">View All Resolved Requests</button>
+			<button type="button" class="btn btn-secondary btn-block" id="viewAllEmployees">View Employees</button>
+			<button type="button" class="btn btn-secondary btn-block" id="logout">Logout</button>
+			<button type="button" class="btn btn-secondary btn-block" id="goToPortal">Return To Employee View</button>
+		</div>
+		<div id="tablespace" class="row col-md-8 col-md-offset-2"></div>
+	</div>
+
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+	    crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+	    crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+	    crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+	<script>
+
+
+		// from http://andreaazzola.com/post-data-js/, maybe rewrite later
+		function post(dictionary, url, method) {
+			method = method || "post"; // post (set to default) or get
+
+			// Create the form object
+			var form = document.createElement("form");
+			form.setAttribute("method", method);
+			form.setAttribute("action", url);
+
+			// For each key-value pair
+			for (var key in dictionary) {
+				//alert('key: ' + key + ', value:' + dictionary[key]); // debug
+				var hiddenField = document.createElement("input");
+				hiddenField.setAttribute("type", "hidden");
+				hiddenField.setAttribute("name", key);
+				hiddenField.setAttribute("value", dictionary[key]);
+				// append the newly created control to the form
+				form.appendChild(hiddenField);
+			}
+
+			document.body.appendChild(form); // inject the form object into the body section
+			form.submit();
+		}
+
+		var populateEmployeeHistory = function (xhr) {
+			var resp = JSON.parse(xhr.response);
+			var tablespace = document.getElementById("tablespace");
+			tablespace.innerHTML = "";
+			var reqTable = document.createElement("table");
+			tablespace.appendChild(reqTable);
+			reqTable.setAttribute("class",
+				"table table-striped table-bordered table-condensed");
+			var row = reqTable.insertRow(-1);
+			var cell0 = row.insertCell(0);
+			var cell1 = row.insertCell(1);
+			var cell2 = row.insertCell(2);
+			var cell3 = row.insertCell(3);
+			var cell4 = row.insertCell(4);
+
+			cell0.innerHTML = "Amount";
+			cell1.innerHTML = "Receipt Image";
+			cell2.innerHTML = "Timestamp";
+			cell3.innerHTML = "Status";
+			cell4.innerHTML = "Handling Manager";
+
+			for (var i = 0; i < resp.length; i++) {
+				row = reqTable.insertRow(-1);
+				cell0 = row.insertCell(0);
+				cell1 = row.insertCell(1);
+				cell2 = row.insertCell(2);
+				cell3 = row.insertCell(3);
+				cell4 = row.insertCell(4);
+
+				cell0.innerHTML = resp[i].amount;
+				cell1.innerHTML = (resp[i].imageLink === null) ? " - " :
+					"<a href=\"http://" + resp[i].imageLink + "\">Link</a>";
+				cell2.innerHTML = resp[i].requestTime;
+				if (resp[i].status == 0) {
+					cell3.innerHTML = "Pending";
+				} else if (resp[i].status == 1) {
+					cell3.innerHTML = "Approved";
+				} else if (resp[i].status == 2) {
+					cell3.innerHTML = "Denied";
+				}
+				cell4.innerHTML = (resp[i].managerId == -1) ? "none" : resp[i].managerId;
+			}
+		}
+
+		var populateAllPendingRequests = function (xhr) {
+
+			var resp = JSON.parse(xhr.response);
+			var tablespace = document.getElementById("tablespace");
+			tablespace.innerHTML = "";
+			var reqTable = document.createElement("table");
+			tablespace.appendChild(reqTable);
+			reqTable.setAttribute("class",
+				"table table-striped table-bordered table-condensed");
+			var row = reqTable.insertRow(-1);
+			var cell0 = row.insertCell(0);
+			var cell1 = row.insertCell(1);
+			var cell2 = row.insertCell(2);
+			var cell3 = row.insertCell(3);
+			var cell4 = row.insertCell(4);
+			cell4.colSpan = 2;
+
+			cell0.innerHTML = "Employee";
+			cell1.innerHTML = "Amount";
+			cell2.innerHTML = "Receipt Image";
+			cell3.innerHTML = "Timestamp";
+			cell4.innerHTML = "Resolve";
+
+			for (var i = 0; i < resp.length; i++) {
+				var row = reqTable.insertRow(-1);
+				var cell0 = row.insertCell(0);
+				var cell1 = row.insertCell(1);
+				var cell2 = row.insertCell(2);
+				var cell3 = row.insertCell(3);
+				var cell4 = row.insertCell(4);
+				var cell5 = row.insertCell(5);
+
+				cell0.innerHTML = resp[i].employeeId;
+				cell1.innerHTML = resp[i].amount;
+				cell2.innerHTML = (resp[i].imageLink === null) ? " - " :
+					"<a href=\"http://" + resp[i].imageLink + "\">Link</a>";
+				cell3.innerHTML = resp[i].requestTime;
+
+				var form = document.createElement("form");
+				form.id = "form" + i + "a";
+				form.method = "post";
+				form.action = "resolveRequest";
+
+				var requestId = document.createElement("input");
+				requestId.type = "hidden";
+				requestId.name = "requestId";
+				requestId.value = resp[i].requestId;
+
+				var approve = document.createElement("input");
+				approve.type = "hidden";
+				approve.name = "decision";
+				approve.value = "approve";
+
+				var submit = document.createElement("input");
+				submit.className = "btn btn-primary btn-sm";
+				submit.type = "submit";
+				submit.value = "Approve";
+
+				cell4.appendChild(form);
+				form.appendChild(requestId);
+				form.appendChild(approve);
+				form.appendChild(submit);
+
+				var form2 = document.createElement("form");
+				form2.id = "form" + i + "d";
+				form2.method = "post";
+				form2.action = "resolveRequest";
+
+				var requestId2 = document.createElement("input");
+				requestId2.type = "hidden";
+				requestId2.name = "requestId";
+				requestId2.value = resp[i].requestId;
+
+				var deny = document.createElement("input");
+				deny.type = "hidden";
+				deny.name = "decision";
+				deny.value = "deny";
+
+				var submit2 = document.createElement("input");
+				submit2.className = "btn btn-primary btn-sm";
+				submit2.type = "submit";
+				submit2.value = "Deny";
+
+				cell5.appendChild(form2);
+				form2.appendChild(requestId2);
+				form2.appendChild(deny);
+				form2.appendChild(submit2);
+			}
+		}
+
+		var populateAllResolvedRequests = function (xhr) {
+
+			var resp = JSON.parse(xhr.response);
+			var tablespace = document.getElementById("tablespace");
+			tablespace.innerHTML = "";
+			var reqTable = document.createElement("table");
+			tablespace.appendChild(reqTable);
+			reqTable
+				.setAttribute("class", "table table-striped table-bordered table-condensed");
+			var row = reqTable.insertRow(-1);
+			var cell0 = row.insertCell(0);
+			var cell1 = row.insertCell(1);
+			var cell2 = row.insertCell(2);
+			var cell3 = row.insertCell(3);
+			var cell4 = row.insertCell(4);
+			var cell5 = row.insertCell(5);
+
+			cell0.innerHTML = "Employee Id";
+			cell1.innerHTML = "Amount";
+			cell2.innerHTML = "Receipt Image";
+			cell3.innerHTML = "Timestamp";
+			cell4.innerHTML = "Status";
+			cell5.innerHTML = "Handling Manager";
+
+			for (var i = 0; i < resp.length; i++) {
+				row = reqTable.insertRow(-1);
+				cell0 = row.insertCell(0);
+				cell1 = row.insertCell(1);
+				cell2 = row.insertCell(2);
+				cell3 = row.insertCell(3);
+				cell4 = row.insertCell(4);
+				cell5 = row.insertCell(5);
+
+				cell0.innerHTML = resp[i].employeeId;
+				cell1.innerHTML = resp[i].amount;
+				cell2.innerHTML = (resp[i].imageLink === null) ? " - " :
+					"<a href=\"http://" + resp[i].imageLink + "\">Link</a>";
+				cell3.innerHTML = resp[i].requestTime;
+				cell4.innerHTML = (resp[i].status == 1) ? "Approved" : "Denied";
+				cell5.innerHTML = resp[i].managerId;
+			}
+
+		}
+
+		function sendAjaxGetWithParams(url, func, strVal) {
+			var xhr = new XMLHttpRequest() ||
+				new ActiveXObject("Microsoft.HTTPRequest");
+			xhr.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200) {
+					func(this);
+				}
+			};
+			xhr.open("GET", url, true);
+			xhr.send(strVal);
+		}
+
+		function populateAllEmployees(xhr) {
+			if (xhr.responseText) {
+				var resp = JSON.parse(xhr.responseText);
+
+				var tablespace = document.getElementById("tablespace");
+				tablespace.innerHTML = "";
+				var reqTable = document.createElement("table");
+				tablespace.appendChild(reqTable);
+				reqTable.setAttribute("class",
+					"table table-striped table-bordered table-condensed");
+				var tRow = reqTable.insertRow(-1);
+				var cell = tRow.appendChild(document.createElement("th"));
+				cell.setAttribute("colspan", 11);
+				cell.innerHTML = "Employee Data";
+				tRow = reqTable.insertRow(-1);
+				var cell0 = tRow.insertCell(0);
+				var cell1 = tRow.insertCell(1);
+				var cell2 = tRow.insertCell(2);
+				var cell3 = tRow.insertCell(3);
+				var cell4 = tRow.insertCell(4);
+				var cell5 = tRow.insertCell(5);
+				var cell6 = tRow.insertCell(6);
+				var cell7 = tRow.insertCell(7);
+				var cell8 = tRow.insertCell(8);
+				var cell9 = tRow.insertCell(9);
+				var cell10 = tRow.insertCell(10);
+				cell0.innerHTML = "ID";
+				cell1.innerHTML = "Username";
+				cell2.innerHTML = "First Name";
+				cell3.innerHTML = "Last Name";
+				cell4.innerHTML = "Address";
+				cell5.innerHTML = "City";
+				cell6.innerHTML = "State";
+				cell7.innerHTML = "ZIP";
+				cell8.innerHTML = "Phone";
+				cell9.innerHTML = "E-mail";
+				cell10.innerHTML = "History";
+
+				for (var i = 0; i < resp.length; i++) {
+					tRow = reqTable.insertRow(-1);
+					cell0 = tRow.insertCell(0);
+					cell1 = tRow.insertCell(1);
+					cell2 = tRow.insertCell(2);
+					cell3 = tRow.insertCell(3);
+					cell4 = tRow.insertCell(4);
+					cell5 = tRow.insertCell(5);
+					cell6 = tRow.insertCell(6);
+					cell7 = tRow.insertCell(7);
+					cell8 = tRow.insertCell(8);
+					cell9 = tRow.insertCell(9);
+					cell10 = tRow.insertCell(10);
+					cell0.innerHTML = resp[i].employeeId;
+					cell1.innerHTML = resp[i].username;
+					cell2.innerHTML = resp[i].firstName;
+					cell3.innerHTML = resp[i].lastName;
+					cell4.innerHTML = resp[i].address;
+					cell5.innerHTML = resp[i].city;
+					cell6.innerHTML = resp[i].state;
+					cell7.innerHTML = resp[i].zip;
+					cell8.innerHTML = resp[i].phone;
+					cell9.innerHTML = resp[i].email;
+
+					var button = document.createElement("button");
+					button.className = "btn btn-primary btn-sm";
+					button.id = "button" + i;
+					button.appendChild(document.createTextNode("View"));
+
+					cell10.appendChild(button);
+
+				}
+
+				for (var i = 0; i < resp.length; i++) {
+					console.log(resp[i]);
+					document.getElementById("button" + i).addEventListener(
+						"click", buttonGen(resp[i].employeeId));
+				}
+			} else {
+				console.log("No employees found. ???");
+			}
+		}
+
+		var buttonGen = function (employeeId) {
+			var inner = function () {
+				sendAjaxGet("getEmployeeHistory?employeeId=" + employeeId,
+					populateEmployeeHistory);
+			}
+			return inner;
+		};
+
+		function sendAjaxGet(url, func) {
+			var xhr = new XMLHttpRequest() ||
+				new ActiveXObject("Microsoft.HTTPRequest");
+			xhr.onreadystatechange = function () {
+				if (this.readyState == 4 && this.status == 200) {
+					func(this);
+				}
+			};
+			xhr.open("GET", url, true);
+			xhr.send();
+		}
+
+
+		document.getElementById("viewAllResolvedRequests").addEventListener(
+			"click",
+			function () {
+				sendAjaxGet("getAllResolvedRequests",
+					populateAllResolvedRequests);
+			});
+
+		document.getElementById("viewAllPendingRequests").addEventListener(
+			"click",
+			function () {
+				sendAjaxGet("getAllPendingRequests",
+					populateAllPendingRequests);
+			});
+
+		document.getElementById("viewAllEmployees").addEventListener("click",
+			function () {
+				sendAjaxGet("getAllEmployees", populateAllEmployees);
+			});
+
+		document.getElementById("viewManagerWebsite").addEventListener("click", function () {
+			sendAjaxGet("serveManagerWebpage", function (xhr) {
+				window.open(xhr.response, '_blank');
+			});
+		});
+
+
+		document.getElementById("logout").addEventListener("click", function () {
+			post([], "logout", "GET");
+		});
+
+		document.getElementById("goToPortal").addEventListener("click", function () {
+			post([], "portal.html", "GET");
+		});
+	</script>
+
+</body>
+
+</html>

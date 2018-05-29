@@ -43,7 +43,7 @@ default strategy for hibernate
 
 eager fetching - get entire object, immediately
 
-data retrieval - get - eageral fetch single object by pk to all related objects
+data retrieval - get - eagerly fetch single object by pk to all related objects
 		- load - lazily fetch single object
 get proxy object with is filled when object is accessed
 
