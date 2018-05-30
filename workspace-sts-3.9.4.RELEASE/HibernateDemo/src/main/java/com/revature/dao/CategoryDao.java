@@ -5,7 +5,7 @@ import java.util.List;
 import com.revature.beans.Category;
 
 public interface CategoryDao {
-
+	
 	public List<Category> getCategories();
 
 	public Category getCategoryById(int id);

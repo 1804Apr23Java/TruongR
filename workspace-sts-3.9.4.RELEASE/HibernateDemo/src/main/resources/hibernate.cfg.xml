@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC
-	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
 	<session-factory>
 		<property name="hibernate.connection.username"></property>
 		<property name="hibernate.connection.password"></property>
 		<property name="hibernate.connection.url"></property>
-		<property name="hibernate.connection.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+		<property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
 		<!-- this can be useful during development but very noisy in the console -->
 		<property name="hibernate.show_sql">true</property>
-		<!-- choose whether to create db or update existing ddl, update default -->
+		<!-- choose whether to create db or update existing ddl -->
+		<!-- update by default -->
 		<property name="hibernate.hbm2ddl.auto">update</property>
 		<!-- locations of domain object mappings -->
 		<mapping class="com.revature.beans.Flashcard"></mapping>
 		<mapping class="com.revature.beans.Category"></mapping>
+		<mapping class="com.revature.beans.Bear"></mapping>
+		<mapping class="com.revature.beans.Bat"></mapping>
+		<mapping class="com.revature.beans.Animal"></mapping>
+		<mapping class="com.revature.beans.Cave"></mapping>
 	</session-factory>
 </hibernate-configuration>

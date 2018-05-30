@@ -7,15 +7,16 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.revature.beans.Category;
+import com.revature.beans.Category;
 import com.revature.util.HibernateUtil;
 
 public class CategoryDaoImpl implements CategoryDao {
 
 	@Override
 	public List<Category> getCategories() {
-		List<Category> flashcards = new ArrayList<Category>();
+		List<Category> categories = new ArrayList<Category>();
 		Session s = HibernateUtil.getSession();
-		List<Category> categories = s.createQuery("from Category").list();
+		categories = s.createQuery("from Category").list();
 		s.close();
 		return categories;
 	}
