@@ -12,23 +12,23 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="QUESTION")
+@Table(name = "QUESTION")
 public class Question {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="questionSequence")
-	@SequenceGenerator(allocationSize=1,name="questionSequence",sequenceName="SQ_QUESTION_PK")
-	@Column(name="QUESTION_ID")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "questionSequence")
+	@SequenceGenerator(allocationSize = 1, name = "questionSequence", sequenceName = "SQ_QUESTION_PK")
+	@Column(name = "QUESTION_ID")
 	private int id;
 	
-	@Column(name="VALUE")
+	@Column(name = "VALUE", nullable = false)
 	private String value;
 	
-	@Column(name="DIFFICULTY")
+	@Column(name = "DIFFICULTY", nullable = false)
 	private int difficulty;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="LIBRARY_ID")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "LIBRARY_ID", nullable = false)
 	private Library library;
 	
 	public Question(int id, String value, int difficulty, Library library) {

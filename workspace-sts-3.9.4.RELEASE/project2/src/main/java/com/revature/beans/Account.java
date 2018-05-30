@@ -9,27 +9,27 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="ACCOUNT")
+@Table(name = "ACCOUNT")
 public class Account {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="accountSequence")
-	@SequenceGenerator(allocationSize=1,name="accountSequence",sequenceName="SQ_USER_PK")
-	@Column(name="ACCOUNT_ID")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "accountSequence")
+	@SequenceGenerator(allocationSize = 1, name = "accountSequence", sequenceName = "SQ_USER_PK")
+	@Column(name = "ACCOUNT_ID")
 	private int id;
-	
-	@Column(name="USERNAME")
+
+	@Column(name = "USERNAME", nullable = false)
 	private String username;
-	
-	@Column(name="PASSWORD")
+
+	@Column(name = "PASSWORD", nullable = false)
 	private String password;
-	
-	@Column(name="EMAIL")
+
+	@Column(name = "EMAIL", nullable = false)
 	private String email;
-	
-	@Column(name="ISADMIN")
+
+	@Column(name = "ISADMIN", nullable = false)
 	private boolean isAdmin;
-	
+
 	public Account(int id, String username, String password, String email, boolean isAdmin) {
 		super();
 		this.id = id;
@@ -38,7 +38,7 @@ public class Account {
 		this.email = email;
 		this.isAdmin = isAdmin;
 	}
-	
+
 	public Account(String username, String password, String email, boolean isAdmin) {
 		super();
 		this.username = username;
@@ -46,7 +46,7 @@ public class Account {
 		this.email = email;
 		this.isAdmin = isAdmin;
 	}
-	
+
 	public Account() {
 		super();
 	}
@@ -96,6 +96,5 @@ public class Account {
 		return "Account [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email
 				+ ", isAdmin=" + isAdmin + "]";
 	}
-	
-	
+
 }

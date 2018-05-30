@@ -2,6 +2,7 @@ package com.revature.beans;
 
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,18 +22,21 @@ public class Attempt {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "attemptSequence")
 	@SequenceGenerator(allocationSize = 1, name = "attemptSequence", sequenceName = "SQ_ATTEMPT_PK")
+	@Column(name="ATTEMPT_ID")
 	private int id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ACCOUNT_ID")
+	@JoinColumn(name = "ACCOUNT_ID", nullable=false)
 	private Account account;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "QUIZ_ID")
+	@JoinColumn(name = "QUIZ_ID", nullable=false)
 	private Quiz quiz;
 
 	@ManyToMany
-	@JoinTable(name = "ATTEMPT_ANSWER")
+	@JoinTable(name = "ATTEMPT_ANSWER",
+				joinColumns = @JoinColumn(name="ATTEMPT_ID", referencedColumnName="ATTEMPT_ID"),
+				inverseJoinColumns = @JoinColumn(name="ANSWER_ID", referencedColumnName="ANSWER_ID"))
 	private Set<Answer> answers;
 
 	public Attempt(int id, Account account, Quiz quiz, Set<Answer> answers) {

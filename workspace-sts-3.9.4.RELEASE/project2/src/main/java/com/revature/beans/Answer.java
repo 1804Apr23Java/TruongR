@@ -17,19 +17,19 @@ import javax.persistence.Table;
 public class Answer {
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="answerSequence")
-	@SequenceGenerator(allocationSize=1,name="answerSequence",sequenceName="SQ_ANSWER_PK")
-	@Column(name="ANSWER_ID")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "answerSequence")
+	@SequenceGenerator(allocationSize = 1,name = "answerSequence", sequenceName = "SQ_ANSWER_PK")
+	@Column(name = "ANSWER_ID")
 	private int id;
 	
-	@Column(name="VALUE")
+	@Column(name="VALUE", nullable=false)
 	private String value;
 	
-	@Column(name="ISCORRECT")
+	@Column(name = "ISCORRECT", nullable = false)
 	private boolean isCorrect;
 
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="QUESTION_ID")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "QUESTION_ID", nullable = false)
 	private Question question;
 
 	public Answer(int id, String value, boolean isCorrect, Question question) {

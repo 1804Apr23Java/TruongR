@@ -21,14 +21,14 @@ public class Library {
 	@Column(name = "LIBRARY_ID")
 	private int id;
 
-	@Column(name = "NAME")
+	@Column(name = "NAME", nullable=false)
 	private String name;
 
-	@Column(name = "STATUS")
+	@Column(name = "STATUS", nullable=false)
 	private Status status;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ACCOUNT_ID")
+	@JoinColumn(name = "ACCOUNT_ID", nullable=false)
 	private Account account;
 
 	public Library(int id, String name, Status status, Account account) {
