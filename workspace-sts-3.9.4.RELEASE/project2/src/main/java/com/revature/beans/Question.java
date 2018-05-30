@@ -90,7 +90,10 @@ public class Question {
 	public void setLibrary(Library library) {
 		this.library = library;
 	}
-	
-	
-	
+
+
+	@Override
+	public String toString() {
+		return "Question [id=" + id + ", value=" + value + ", difficulty=" + difficulty + ", library=" + library + "]";
+	}
 }

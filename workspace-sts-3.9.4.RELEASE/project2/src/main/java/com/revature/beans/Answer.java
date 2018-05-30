@@ -11,20 +11,19 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-
 @Entity
 @Table(name = "ANSWER")
 public class Answer {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "answerSequence")
-	@SequenceGenerator(allocationSize = 1,name = "answerSequence", sequenceName = "SQ_ANSWER_PK")
+	@SequenceGenerator(allocationSize = 1, name = "answerSequence", sequenceName = "SQ_ANSWER_PK")
 	@Column(name = "ANSWER_ID")
 	private int id;
-	
-	@Column(name="VALUE", nullable=false)
+
+	@Column(name = "VALUE", nullable = false)
 	private String value;
-	
+
 	@Column(name = "ISCORRECT", nullable = false)
 	private boolean isCorrect;
 
@@ -46,10 +45,13 @@ public class Answer {
 		this.isCorrect = isCorrect;
 		this.question = question;
 	}
-	
 
 	public Answer() {
 		super();
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Answer [id=" + id + ", value=" + value + ", isCorrect=" + isCorrect + ", question=" + question + "]";
+	}
 }
