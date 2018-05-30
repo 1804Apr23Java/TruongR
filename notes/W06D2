@@ -1,0 +1,39 @@
+gitflow
+
+master -------------------------------
+		|
+		dev--------------------
+			|
+			feature-----------
+
+-------------------
+
+Spring
+
+Inversion of Control (IoC) - methodology/pattern giving control of code to framework
+			- allowing out beans to be managed and have dependencies provided to them
+(Framework)
+
+Counter*** to service-locator pattern - library structure, beans manage own lifecycle, control location and instantiation of dependencies
+library - list of functions and resources
+
+Hollywood Principle (of IoC) - "Don't call us, we'll call you"
+
+Dependency Injection - way to achieve IoC
+dependency - resource to be used
+injection - act of passing a dependency to the dependent object
+
+decoupling task execution from task implementation
+more modularity, less boilerplate
+
+Spring framework -> Java framework (2002, rob johnson) used by pretty much everyone, to make D.J. easy for developers
+
+Spring container / IoC container manages/stores app's dependencies
+
+java object which contains information about mappings and instances of dependencies
+
+injects dependencies of registered beans
+
+
+POJOs (beans)	-> IoC Container	-> Working app
+Config metadata

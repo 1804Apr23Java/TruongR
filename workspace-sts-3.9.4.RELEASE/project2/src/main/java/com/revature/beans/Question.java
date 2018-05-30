@@ -3,6 +3,7 @@ package com.revature.beans;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,7 +29,7 @@ public class Question {
 	private int difficulty;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "LIBRARY_ID", nullable = false)
+	@JoinColumn(name = "LIBRARY_ID", nullable = false, foreignKey=@ForeignKey(name = "FK_QUESTION_LIBRARY"))
 	private Library library;
 	
 	public Question(int id, String value, int difficulty, Library library) {

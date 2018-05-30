@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,21 +23,23 @@ public class Attempt {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "attemptSequence")
 	@SequenceGenerator(allocationSize = 1, name = "attemptSequence", sequenceName = "SQ_ATTEMPT_PK")
-	@Column(name="ATTEMPT_ID")
+	@Column(name = "ATTEMPT_ID")
 	private int id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ACCOUNT_ID", nullable=false)
+	@JoinColumn(name = "ACCOUNT_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_ATTEMPT_ACCOUNT"))
 	private Account account;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "QUIZ_ID", nullable=false)
+	@JoinColumn(name = "QUIZ_ID", nullable = false, foreignKey = @ForeignKey(name = "FK_ATTEMPT_QUIZ"))
 	private Quiz quiz;
 
 	@ManyToMany
-	@JoinTable(name = "ATTEMPT_ANSWER",
-				joinColumns = @JoinColumn(name="ATTEMPT_ID", referencedColumnName="ATTEMPT_ID"),
-				inverseJoinColumns = @JoinColumn(name="ANSWER_ID", referencedColumnName="ANSWER_ID"))
+	@JoinTable(name = "ATTEMPT_ANSWER", 
+				joinColumns = @JoinColumn(name = "ATTEMPT_ID", referencedColumnName = "ATTEMPT_ID"), 
+				inverseJoinColumns = @JoinColumn(name = "ANSWER_ID", referencedColumnName = "ANSWER_ID"),
+				foreignKey = @ForeignKey(name = "FK_ATTEMPT_ANSWER_ATTEMPT"),									
+				inverseForeignKey = @ForeignKey(name = "FK_ATTEMPT_ANSWER_ANSWER"))
 	private Set<Answer> answers;
 
 	public Attempt(int id, Account account, Quiz quiz, Set<Answer> answers) {
@@ -94,6 +97,5 @@ public class Attempt {
 	public String toString() {
 		return "Attempt [id=" + id + ", account=" + account + ", quiz=" + quiz + ", answers=" + answers + "]";
 	}
-	
-	
+
 }
