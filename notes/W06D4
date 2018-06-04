@@ -1,0 +1,139 @@
+Spring ORM
+
+For integrating data access code into a spring app
+
+easier testing, transaction management
+cleaner code
+hibernate config moves to spring config
+datasource -> like configuration
+session factory -> handles datasource config
+transaction manager
+
+contextual sessions within orm?
+sessions are managed by spring unless we implement java transaction api (JTA) (we are not)
+
+use hibernate's CurrentSessionContext set to really be spring session context
+
+@Repository - registers bean, gives better exceptions than sqlexception or hibernateexception, PersistenceExceptionTranslationPostProcessor is aware that exceptions coming from @Repository should be spring data exceptions
+
+@Transactional - on DAO methods, code within these methods should execute transactionally
+Transaction commits when method completes, unifying transactions with dao method
+
+Transaction Propagation - how nested logical transactions will interact with each other to form physical transactions
+
+@Component
+public class OuterBean {
+	@Autowired
+	TestDao td;
+
+	@Autowired
+	InnerBean ib;
+
+	@Transactional (propagation = Propagation.REQUIRED)
+	public void alsoTestTx() {
+	//things
+	
+	try {
+	ib.testTx();
+	}	
+	catch(...)
+	//stuff
+	}
+}
+
+@Component
+public class InnerBean {
+	@Transactional (propagation = Propagation.REQUIRED)
+	public void testTx() {
+		throw new RuntimeException();	
+	}
+}
+
+Strategies:
+Required 	- same physical transaction will be used if one exists, default behavior
+		- inner fails -> outer also fails
+Requires_New	- new physical transaction created for every @Transactional method
+		- inner fails -> outer could still commit
+Nested		- same physical transaction, inner/outer represent save points
+Mandatory	- inner transaction must be called from within a @Transactional, otherwise we get errors
+Never		- inner transaction must never be called from within a @Transactional
+Not_Supported	- executes outside of (and pauses) existing logical transactions
+Supports	- supports current transaction, executes non-transactionally if none exists
+
+could still set up external data source
+
+w/ JNDIObjectFactoryBean
+
+JSR-303
+API for validation
+javax.validation
+used by Spring MVC
+@Valid to check incoming object has correct format
+
+SOA - Service Oriented Architecture
+
+break up applications into decrete + reusable layers or modules
+
+communication over some protocol (HTTP, usually)
+
+DB <-> data access <-> business logic <-> UI <-> Via
+
+Separation of Concerns for easier testing + consistency
+
+web service - provides a standard means for interoperating between software applications built on a variety of platforms and frameworks - w3c
+
+user a web service - "consume"
+create a web service - "expose"
+side note: http requests are constructed with xml but can include data in any format
+
+REST - representational state transfer
+- simple web service
+- good for APIs
+- only http - can transmit data in any format within request/response
+- simple url endpoints, no contracts
+- stateless - the necessary state to handle request is in its body
+
+design principles:
+- uniform interface
+- use http methods correctly
+- authentication
+- sanitize input with validation
+- generic errors
+
+exposing rest
+spring rest:
+@RestController
+special case of spring mvc, skip view resolver
+combination of @Controller and @ResponseBody
+handle errors with status codes
+
+can use spring @RestController, or anything which can expose endpoints (servlets, angular, anything with endpoints)
+
+@ConsumingRest
+RestTemplate - class
+org.springframework.web.client.RestTemplate
+getForEntity
+postForEntity
+
+----------
+
+Spring Boot
+- purpose of spring boot - set up a web app quickly, efficiently, with minimal config
+- lots of defaults which can be overridden
+- java-based config
+- package as jar, has embedded tomcat server, deploys itself
+- build application.java (or whatever) w/ @SpringBootApplication
+@SpringBootApplication - combination of four different annotations
+@Configuration @EnableAutoConfiguration @EnableWebMVC @ComponentScan
+no beans.xml or web.xml, but we do have an application.properties
+- keep static resources in /static, /public, /resources, /META-INF/resources
+- not great with JSPs
+- devtools -> for easier development
+- Actuator -  expose two points for monitoring + interacting with app
+
+Spring Data - DAOs will extend JpaRepository (which extends CrudRepository) w/o concrete implementations
+
+"Convention over Configuration"
+
+
+

@@ -37,3 +37,151 @@ injects dependencies of registered beans
 
 POJOs (beans)	-> IoC Container	-> Working app
 Config metadata
+can be xml, annotations, Java (Java class w/ mapping and bean definitions)
+
+XML
+central config file, typically called beans.xml
+used to registers beans with IoC container
+
+note - spring works the same no matter how you configure it
+
+module - can mix and match to expand the framework
+
+-> Core 
+-> Beans - Essential dependency injection Features, BeanFactory interface -> Context builds on core beans allows framework-style bean access, includes ApplicationContext interface
+-> AoP
+-> MVC
+-> ORM
+-> REST
+-> Security
+-> Test
+-> Cloud
+-> Data
+-> Boot
+
+BeanFactory					 	vs. 	ApplicationContext
+Older								Newer
+Lazily instantiates beans					Superset of Bean Factory
+Sophisticated factory pattern					Eagerly instantiates Spring beans
+saves developer from doing manual mapping			instantiates all required beans at application start
+Not IoC container, but contains recipes for beans		IoC container -> reads config metadata to creates and manages instances of beans
+Decouple configuration+dependencies from source code
+
+Implementations -
+ClassPathXmlApplicationContext
+FileSystemXmlApplicationXMLContext
+XmlWebApplicationContext <- for web-awareapps
+
+what is a spring bean?
+
+POJO whose lifecycle is managed by your IoC container
+Must be Serializable
+"Bean Definition" - recipe for creatung an instance of the bean
+two ways of registering beans
+
+1. beans.xml
+<bean name="bear" class="com.revature.Bear">
+</bean>
+
+2. annotations
+@Component
+public class Bear implements Serializable{}
+
+3. Java config
+@Configuration
+public class AppConfig{ @Bean ... }
+
+Important annotations:
+@Component - register class as bean
+@Repository - register class as bean , act as as DAO
+@Controller - class will contain RequestHandler methods, for SpringMVC
+@Service - register bean, indicates service behavior
+@Autowired - used to automatically provide beans to each other
+@Inject - not a spring annotation, but is used in a similar way to @Autowired, standard java annotation, using the Provider interface
+@Configuration - for java-based bean config, use on a class containing @Bean - annotated methods
+
+----
+
+Bean Wiring
+- providing beans to other beans
+- dependency injection strategies:
+	- setter injection - use setter method to provide dependencies, readable, but does not ensure dependency injection unless you use @Required, because setters are optional
+	- constructor injection - provide dependencies at instantiation, object can't be created unless all dependencies are ready
+	- interface injection - Spring does not support this
+	can manually wire beans or autowire - by name or by type (class)
+	- allow spring to automagically determine dependencies
+
+Component Scanning
+put all config into annotations and tell Spring to go look for it
+lose some readbiliy
+<context: component-scan base-package="com.revature"></context: component-scan>
+
+Bean Scopes
+different from variable scopes
+related to when and how a bean is instantiated
+
+singleton scope
+single instance per IoC container
+default scope
+eagerly instantiated by applicationcontext
+spring manages entire lifecycle
+
+prototype scope
+many instances per IoC container
+a new instance is created every time a bean is requested
+good for lightweight beans with some conversational state
+lazily instantiated
+
+other scopes for webapps
+request
+session
+globalsession(portlets)
+web sockets
+application -> servletcontext
+
+spring bean lifecycle
+(request a bean / start app)
+
+[ instantiation ]
+populate properties
+setBeanName() (BeanNameAware)
+setBeanFactory() (BeanFactoryAware) - contains rest of the bean's dependencies
+PreinitalizationBeanPostProcessors - methods you see if beans break usually
+[ afterPropertiesSet() (Initializing Bean) ]
+[ custom init methods - provide an entry point to the lifecycle ] preferred
+PostinitializationBeanPostProcessors
+(Bean ready)
+[ (container is shut down) ]
+[ destroy() - method that happens when the bean is destroyed (DisposableBean) ]
+[ custom destroy methods ] preferred
+
+---------
+
+Aspect Oriented Programming
+
+Break down applications into "cross-cutting concerns" or "aspects" (units of programmability) necessary features unrelated to business purpose of app
+inject code supporting CCCs with spring
+
+Ex: testing, logging, security
+
+Some vocab
+join point - a point in the application where code will be injected, typically coupled with method execution
+advice - code to be modeled at a join point, modelled as interceptors around join point
+three kinds - 	before, can't prevent join point code unless an exception is thrown
+		after - after returning or after throwing (robustness of finally but behavior of catch)
+		around - most powerful type, can specify behavior before or after, need to manually tell join point to proceed
+rule of thumb - use least powerful advice you need
+
+point cuts - a program element specifying where advice will be applied
+use a pointcut expression -> predicate indicating what is eligible to be advised
+
+e.g. pointcut - methods in com.revature that start with get
+
+target object -> object being advised, Spring aop creates a proxy object which intercepts calls to the target
+"all mapped beans are auto-proxied" unless a class is marked as advice
+
+call to target -> auto proxy -> target
+if no behavior defined, proxyp does nothing
+
+@Aspect - prevents autoproxying, indicares a class will contain advice
+

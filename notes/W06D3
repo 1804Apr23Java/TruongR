@@ -1,0 +1,116 @@
+Core 
+Spring container -> manages spring bean lifecycle
+Dependency injection -> 
+
+Bean scopes
+singleton vs. prototype
+
+get beans from applicationcontext
+
+ApplicationContext - interface, spring container
+spring bean lifecycle
+
+---
+
+AoP
+Aspects -> CCC, Join Points where Advice can be applied
+Point cuts
+
+AspectJ Annotations
+use these annotations
+can use xml approach to accomplish AoP, but less control
+
+point cut expressions
+- specify where advice will be applied
+- types
+	- execution - refers to general method execution in a given location
+	- every method in com.revature: execution (* com.revature.*.**(...))
+	- within - limits to a passage/inheritance tree
+	- this/target, limit to datatype or class
+	- args, limit based on method arguments
+
+--------------------
+
+Spring MVC
+For handling HTTP requests
+Front Controller implementation
+One dispatcher servlet handling all requests
+
+Deployment Descriptor (web.xml)
+
+Handler mapping
+
+controllers
+
+dispatcher servlet
+
+view resolver
+
+1. client sends http request which deployment descriptor sends to dispatcher servlet
+2. dispatcher servlet consults handler mapping to determine which container should handle requests
+3. dispatcher servlet passes request to appropriate controller
+4. our controller returns a viewname and maybe model data
+5. if logical view name is returned, dispatcher servlet passes it to view resolver, which will return the implementation of that view.
+6. our view resolver uses model data to render the view
+7. response returned
+
+disclaimer - 5-6 only if doing server-side rendering
+
+one* Dispatcher servlet
+*not necessarily, if app is large and complex
+can handle server-side rendering, client-side rendering, and static resources
+
+each ds has own IoC container, which is our XmlWebApplicationContext
+
+Servlet WebApplicationContext
+- Controllers
+- Handler Mapping
+- View Resolver
+^
+|
+RootWebApplicationContext
+- Services
+- Repositories
+- Other Middle-tier Beans
+
+now we care about ServletConfig - set servlet WebApplicationContext
+and ServletContext - sets root WebApplicationContext to put in middle-tier items
+
+ContextConfigLocation as context-param and init-param to specify beans.xml locations in deployment descriptor
+
+ContextLoaderListener - to load middle and data-tier beans
+
+---------
+
+Handler Mapping
+Configuration metadata consulted by DS to route requests to controllers
+registered bean
+RequestMappingHandlerMapping
+old version: DefaultAnnotationHandlerMapping
+@RequestMapping
+<mvc:annotation-driven>...
+
+Controllers
+- Java Classes with action methods to handle HTTP requests
+- NOT Servlets, but are used by servlets
+@Controller
+
+Other useful annotations:
+@RequestParam("name")
+argument to controller method
+
+@RequestBody
+Return data + only data
+
+user templates
+
+@GetMapping(value="/id/{bearId}")
+
+@PathVariable can grab bearId and many others if declared
+
+
+
+
+
+
+
