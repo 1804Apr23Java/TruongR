@@ -1,0 +1,119 @@
+XML - extensible markup language
+
+not a programming language, data transfer format
+designed to be both human and machine readable
+language-agnostic
+
+<?xml version="1.0">
+<note>
+	<heading>
+		<to>Bob</to>
+		<from>Fred</fred>
+	</heading>
+</note>
+
+"Well-formed" good style - begins with xml declaration, unique root, tags closed, elements are case sensitive
+
+"valid" - follows predefined structure
+-> <!DOCTYPE ...>
+follow a Document Type Definition (DTD) or XML schema Definition (XSD)
+
+DTD: defines legal elements and attributes
+
+-> define shared format to make xml easily passable by different entities
+
+note.dtd:
+
+<!ELEMENT note (heading, message)>
+<!ELEMENT heading (to, from)>
+<!ELEMENT message(#CDATA)>
+<!ELEMENT to (#CDATA)>
+
+XSD:
+-> for structire
+elements + attributes, number and order of child elements
+-> data types
+-> default and fixed values
+-> written in xml, xsd can inherit from each other
+
+<beans xmlns:"http.../beans" xmlns:mvc:"http..../mvc" ....axgwmlOXrion: "....xsd">
+
+soap services
+
+simple object access protocol
+
+platform independent style of web service (like rest)
+- soap - messages in xml
+- b2b or business to business
+- works over multiple protocols
+
+
+rest
+- messages of any format
+- http/https only
+- no contract - api of simple documents
+
+
+WSDL	- web service definition language
+	- defines all allowed operations and datatypes for a soap service (also errors)
+	- like interfaces, "contracts" or "endpoint-interfaces"
+	- both exposing and consuming entities are aware of wsdl
+
+strategies for exposing java service
+contract-first - build wsdl, write java to match, wsimport
+contract-last - write java, generate WSDL, @WebService
+
+soap messages - xml doc
+envelope - mendatory root element
+header - for optional message attributes
+body - mandatory, holds content
+fault - 
+
+HTTP request
+Header
+body
+soap message
+fault - optional, indecates whether anything went wring while processing msg
+500-599 status codes (HTTP)
+
+Sub-elements
+fault code (error)
+failt string (accitional msg)
+fault actor (which node caused error)
+details (optional)
+
+Apachle CXF jaxws
+
+wsal - definitions
+root tag attributes
+targetNamespace -> logical name for the current service definition
+xmlns:wsdl -> namespace for wsdl elements
+name -> name of service
+tag - "this namespace" - usially the same as targetNamespace
+
+types - information about complex types 
+port - single endpoint defined as a binding = network address
+contains port type , which specifies a set of operations available at at a particular endpoint
+operation - abstract definition of actions availabe via the sercise
+binding - how operations may be invoked (protocal and data format) for a particular porttype
+message - abstract representation of data being communicated
+service
+
+dude! the posh mall put on big sale
+definitions, types, port, message, porttype, operation, binding, service
+
+Java Implementation
+- note - do not need to use java!
+use jax-b besides the scenes
+use jax-ws
+Java API: for xml web services
+also good for rest
+helpful annotations for defining service methods
+
+exposing /Library with CxfServlet + Spring
+^
+exchanging soap messages
+v
+consuming Library Service
+
+

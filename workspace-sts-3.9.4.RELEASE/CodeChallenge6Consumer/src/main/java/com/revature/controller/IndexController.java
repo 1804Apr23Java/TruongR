@@ -14,17 +14,17 @@ import com.revature.beans.Cat;
 @RestController
 @RequestMapping("/")
 public class IndexController {
-	
+
 	@Autowired
 	RestTemplate restTemplate;
-	
 
 	@GetMapping("/{id}")
 	public ResponseEntity<String> printString(@PathVariable int id) {
 		Cat cat = restTemplate.getForObject("https://codechallenge6.cfapps.io/cat/" + id, Cat.class);
-		String str = "<!DOCTYPE html> <head><title>Cat!</title></head> <body><p>This cat is named " + cat.getCatName() + " who is a " + cat.getBreed().getBreedName() + ". <br><img src=\"" + cat.getCatPic() + "\"/></p></body>";
+		String str = "<!DOCTYPE html> <head><title>Cat!</title></head> <body><p>This cat is named " + cat.getCatName()
+				+ " who is a " + cat.getBreed().getBreedName() + ". <br><img src=\"" + cat.getCatPic()
+				+ "\"/></p></body>";
 		return new ResponseEntity<String>(str, HttpStatus.OK);
 	}
 
-	
 }

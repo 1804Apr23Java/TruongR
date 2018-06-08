@@ -1,0 +1,67 @@
+IaaS vs PaaS
+
+manifest.yml
+
+applications:
+- name: flashcard_app
+- memory: 700M
+- instances: 1
+domain: [...] shared (allargs) cfapps.ip, private (only specific orgs)
+
+can set up for hhtp or tcp
+
+different from ??? -> globally unique, made of domain + hosname + context path (#http) (domain + port + if tcp)
+
+random-value: true
+buildpack: contains libraries needed to construct app env
+
+"droplet"
+
+scaling - horizontal - changing number of instances
+
+12-factor app
+codebase
+dependencies
+config
+backing services
+build, release, run
+stateless processes
+port binding
+concurrency
+disposability
+dev/prod parity
+
+microservices
+recall - Service Oriented Architecture
+
+reusabble monoliths
+
+[API]
+
+[Service A] [Service B] <- subdomains of system
+
+[DB]
+
+MSA - microservice architecture
+
+focused on decoupling as much as possible into small, lightweight standalone apps
+NoSql- works well
+
+services unaware of each other, so lightweight messaging services (typically queues like kafka, rabbit, etc.)
+every service does one thing well, narrow focus
+
+service registry + discovery
+ensuring that we provide, correct service when request is made
+netflix oss - eureka
+register all services with eureka
+euraka handles rating information
+
+gateway
+- handle all requests 
+- netfix oss - zuul
+- filters access to system
+
+cleint -> pre fil
+
+zull filter has the components - type, execution order, criteria, action
+

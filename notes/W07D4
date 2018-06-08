@@ -1,0 +1,34 @@
+Load Balancing - managing how requests are distributed to service instances
+
+Server-side - opinionated load balancer, configured in available services which passively respond
+
+Problem - broken service
+load balancer needs to be updated if service stopes responding
+
+Client-side
+
+- service registry keeps tracks of instances (eureka, consul, zookeeper)
+- lb only ware of responsive services
+- (ribbon)
+
+------
+
+Hystrix
+
+- logo is a porcupine
+- designed to prevent cascading failures
+- implements a circuit-breaking pattern - preventing calls from being made to downed services
+- graceful failures -> fast and silent
+- can provide a fallback action, which will occur if service goes down (dummy data, error message, etc.)
+@EnableCircuitBreaker
+- histrix + spring boot -> uses [[[[[[[[[[[[[[[[[[[[ACTUATOR]]]]]]]]]]]]]]]]]]]]
+- exposes stream for monitoring
+- view activity in real time
+turbine -> aggregate multiple streams onto same dashboard
+dont have to register with eureka, standalone monitoring service
+
+kafka - have separate userservice + batchservice with separate backends, if delete batch, how to maintain userservice integrity? use messaging service
+from apache
+services to publish andsubscribe to streams of records
+records (messages) - key, payload, timestamp
+split into categories (topics), producers publish to topic, consumer subscribes

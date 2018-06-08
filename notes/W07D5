@@ -1,0 +1,8 @@
+Kafka
+- for communicating between microservices
+
+Records - messages
+- unique identifier, key, payload, timestamp
+- topics - records are published by publishers
+- consumers subscribe to topics
+
