@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: calibrate-app
+  cloud:
+    config:
+      uri: http://localhost:8888

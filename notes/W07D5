@@ -5,4 +5,36 @@ Records - messages
 - unique identifier, key, payload, timestamp
 - topics - records are published by publishers
 - consumers subscribe to topics
+- subscribers can join groups, in which only one members will get messages
 
+queues
+pro - scalable
+con - one process recieves msg, maintaining order is difficult in parallel processing
+	
+vs publisher/subscriber
+- pro - multiple subscribers can get message
+- con - less scalable, every message goes to every subscriber
+
+kafka's solution - kafka clustering
+- cluster - several kafka servers ("brokers")
+- every broker has a share of partitions
+- partition - is a replica of a topic's stream
+
+topic ex:			offset - sequential id number representing place in stream
+- partition 	0	[copy of stream w/ records]
+		1	[copy of stream w/ records]
+		2	[copy of stream w/ records]
+statefulness only on consumer side - will track the offset - position in log - from which they intend to draw from
+broker is stateless
+
+all read/writes to topic goes through a "leader" which must communicate to other replicas
+
+Zookeeper - open source server
+- holds stream and related info about partitions
+
+what is docker - container technology - lightweight encapsulation of an environment
+docker image - blueprint for a container
+dockerfile - defines an image
+
+hw - go through docker tutorial (handson) in general slack
+enthuware

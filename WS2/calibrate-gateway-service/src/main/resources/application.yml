@@ -1,0 +1,21 @@
+server:
+  port: 9090
+  
+spring:
+  application: 
+    name: flashcard-gateway-service
+    
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+      
+zuul:
+  prefix: /api
+  routes:
+    test:
+      path: /neo/** 
+      url: http://www.neopets.com/
+    flashcards-by-service-name:
+      path: /cards/**
+      serviceId: calibrate-app
